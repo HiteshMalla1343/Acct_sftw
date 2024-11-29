@@ -1,0 +1,18 @@
+/* src/background.css */
+
+
+.background-container {
+    flex: 1;
+    background-image: url('../Assets/mainbackground.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    height: calc(100vh - 4rem); /* Subtract navbar height */
+    width: 100%;
+    display: flex;
+    justify-content: stretch;
+    align-items: center;
+    color: white;
+  }
+  
