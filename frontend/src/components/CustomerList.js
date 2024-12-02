@@ -1,54 +1,112 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "../css/CustomerList.css";
 
 const CustomerList = () => {
-  const options = ["MARKET INDIA BATCH", "OPTION 2", "OPTION 3"];
-  const data = [
-    { code: "001", accountName: "John Doe", town: "New York", schedule: "Option 1", teluguName: "జాన్ డో" },
-    { code: "002", accountName: "Jane Smith", town: "Los Angeles", schedule: "Option 2", teluguName: "జేన్ స్మిత్" },
-    { code: "003", accountName: "Michael Scott", town: "Scranton", schedule: "Option 3", teluguName: "మైఖేల్ స్కాట్" },
-  ];
+  const [customers, setCustomers] = useState([]);
+  const [formData, setFormData] = useState(null); // Form data for editing
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/customers");
+        setCustomers(response.data);
+      } catch (error) {
+        console.error("Error fetching customers:", error);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
+
+  const handleUpdate = (customer) => {
+    setFormData(customer); // Set the selected customer data in the form for editing
+  };
+
+  const handleDelete = async (code) => {
+    if (window.confirm("Are you sure you want to delete this customer?")) {
+      try {
+        await axios.delete(`http://localhost:8000/api/customers/${code}`);
+        setCustomers((prev) => prev.filter((customer) => customer.code !== code));
+      } catch (error) {
+        console.error("Error deleting customer:", error);
+      }
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = async () => {
+    try {
+      if (!formData) return;
+      const response = await axios.put(
+        `http://localhost:8000/api/customers/${formData.code}`,
+        formData
+      );
+      alert("Customer updated successfully");
+      setCustomers((prev) =>
+        prev.map((customer) =>
+          customer.code === formData.code ? formData : customer
+        )
+      );
+      setFormData(null); // Clear the form after saving
+    } catch (error) {
+      console.error("Error updating customer:", error);
+    }
+  };
+
   return (
     <div className="customerlist bold-text">
-      {/* Form Container */}
-      <div className="form-container">
-        {/* Left Section: Labels */}
-        <div className="form-labels">
-          <label>Code</label>
-          <label>Name</label>
-          <label>Telugu Name</label>
-          <label>Schedule</label>
-          
-        </div>
-
-        {/* Right Section: Inputs */}
-        <div className="form-inputs">
-          <input type="text" className="input code" />
-          <input type="text" className="input name-phone-city" />
-          <input type="text" className="input name-phone-city" />
-          <select className="input schedule">
-            {options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
+      {/* Form Section for Editing */}
+      {formData && (
+        <div className="form-container">
+          <h3>Edit Customer</h3>
+          <input
+            type="text"
+            name="accountName"
+            value={formData.accountName}
+            onChange={handleInputChange}
+            placeholder="Account Name"
+          />
+          <input
+            type="text"
+            name="town"
+            value={formData.town}
+            onChange={handleInputChange}
+            placeholder="Town"
+          />
+          <input
+            type="text"
+            name="teluguName"
+            value={formData.teluguName}
+            onChange={handleInputChange}
+            placeholder="Telugu Name"
+          />
+          <select
+            name="schedule"
+            value={formData.schedule}
+            onChange={handleInputChange}
+          >
+            <option value="">Select Schedule</option>
+            {/* Add schedule options dynamically if needed */}
           </select>
+          <button onClick={handleSave}>Save</button>
+          <button onClick={() => setFormData(null)}>Cancel</button>
         </div>
-      </div>
+      )}
 
-      {/* Button Section */}
-      <div className="button-section">
-        <button>Show</button>
-        <button>Print</button>
-        <button>Close</button>
-      </div>
-
-      {/* Tray Section */}
+      {/* Table Section */}
       <div className="table-section">
         <div className="table-container">
-        <table className="custom-table">
+          <table className="custom-table">
             <thead>
-            <tr>
+              <tr>
                 <th>Code</th>
                 <th>Account Name</th>
                 <th>Town</th>
@@ -56,22 +114,26 @@ const CustomerList = () => {
                 <th>Telugu Name</th>
                 <th>Update</th>
                 <th>Delete</th>
-            </tr>
+              </tr>
             </thead>
             <tbody>
-            {data.map((row, index) => (
+              {customers.map((customer, index) => (
                 <tr key={index}>
-                <td>{row.code}</td>
-                <td>{row.accountName}</td>
-                <td>{row.town}</td>
-                <td>{row.schedule}</td>
-                <td>{row.teluguName}</td>
-                <td><button>Update</button></td>
-                <td><button>Delete</button></td>
+                  <td>{customer.code}</td>
+                  <td>{customer.accountName}</td>
+                  <td>{customer.town}</td>
+                  <td>{customer.schedule}</td>
+                  <td>{customer.teluguName}</td>
+                  <td>
+                    <button onClick={() => handleUpdate(customer)}>Update</button>
+                  </td>
+                  <td>
+                    <button onClick={() => handleDelete(customer.code)}>Delete</button>
+                  </td>
                 </tr>
-            ))}
+              ))}
             </tbody>
-        </table>
+          </table>
         </div>
       </div>
     </div>
