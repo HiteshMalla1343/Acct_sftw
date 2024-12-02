@@ -1,0 +1,61 @@
+.draggable-resizable-window {
+    position: fixed;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: calc(100% - 20px); /* Prevent window from exceeding the screen width */
+    max-height: calc(100% - 20px); /* Prevent window from exceeding the screen height */
+    z-index: 11;
+  }
+  
+  
+  .draggable-resizable-window:active {
+    cursor: grabbing;
+  }
+  
+  .window-header {
+    height: 40px;
+    background-color: #0078d4;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    cursor: grab;
+  }
+  
+  .window-controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .window-content {
+    padding: 20px;
+    font-size: 14px;
+    color: #333;
+    user-select: none; /* Prevent text selection during dragging */
+    overflow: auto;
+    height: calc(100% - 40px);
+  }
+  
+  .resize-handle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    bottom: 0;
+    right: 0;
+    background: #ccc;
+    cursor: nwse-resize;
+  }
+  .no-select {
+    user-select: none; /* Prevent text selection */
+    -webkit-user-select: none; /* For Safari */
+    -ms-user-select: none; /* For older versions of IE */
+  }
+  
+  
