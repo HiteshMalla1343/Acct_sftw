@@ -15,4 +15,6 @@ class AccountCreate(BaseModel):
         print("Model Validator received:", values)  # Debugging
         if not values.code.startswith(values.name[0].upper() or values.name[0]):
             raise ValueError("Code must start with the first letter of the name.")
+        if type(int(values.code[1:])) is not int :
+            raise ValueError("Code must contain only integers after first letter.")
         return values

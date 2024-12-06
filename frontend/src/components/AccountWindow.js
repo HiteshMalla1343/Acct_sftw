@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../css/AccountWindow.css";
 
-const AccountWindow = () => {
+const AccountWindow = ({onAccountAdded}) => {
   const [schedules, setSchedules] = useState([]);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({  
     code: "",
     name: "",
     phone: "",
@@ -53,6 +53,8 @@ const AccountWindow = () => {
       );
 
       alert(response.data.message);
+      onAccountAdded();
+
       // Reset form after successful save
       setFormData({
         code: "",

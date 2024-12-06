@@ -2,22 +2,24 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../css/CustomerList.css";
 
-const CustomerList = () => {
+const CustomerList = ({trigger}) => {
+  const options=['happy','sad']
   const [customers, setCustomers] = useState([]);
   const [formData, setFormData] = useState(null); // Form data for editing
+  
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/api/customers");
-        setCustomers(response.data);
-      } catch (error) {
-        console.error("Error fetching customers:", error);
-      }
-    };
+    useEffect(() => {
+      const fetchCustomers = async () => {
+        try {
+          const response = await axios.get("http://localhost:8000/api/customers");
+          setCustomers(response.data);
+        } catch (error) {
+          console.error("Error fetching customers:", error);
+        }
+      };
 
-    fetchCustomers();
-  }, []);
+      fetchCustomers();
+    }, [trigger]);
 
   const handleUpdate = (customer) => {
     setFormData(customer); // Set the selected customer data in the form for editing
@@ -64,42 +66,30 @@ const CustomerList = () => {
   return (
     <div className="customerlist bold-text">
       {/* Form Section for Editing */}
-      {formData && (
-        <div className="form-container">
-          <h3>Edit Customer</h3>
-          <input
-            type="text"
-            name="accountName"
-            value={formData.accountName}
-            onChange={handleInputChange}
-            placeholder="Account Name"
-          />
-          <input
-            type="text"
-            name="town"
-            value={formData.town}
-            onChange={handleInputChange}
-            placeholder="Town"
-          />
-          <input
-            type="text"
-            name="teluguName"
-            value={formData.teluguName}
-            onChange={handleInputChange}
-            placeholder="Telugu Name"
-          />
-          <select
-            name="schedule"
-            value={formData.schedule}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Schedule</option>
-            {/* Add schedule options dynamically if needed */}
-          </select>
-          <button onClick={handleSave}>Save</button>
-          <button onClick={() => setFormData(null)}>Cancel</button>
+      {formData &&  (<div className="form-container">
+        {/* Left Section: Labels */}
+        <div className="form-labels">
+          <label>Code</label>
+          <label>Name</label>
+          <label>Telugu Name</label>
+          <label>Schedule</label>
+          
         </div>
-      )}
+
+        {/* Right Section: Inputs */}
+        <div className="form-inputs">
+          <input type="text" className="input code" />
+          <input type="text" className="input name-phone-city" />
+          <input type="text" className="input name-phone-city" />
+          <select className="input schedule">
+            {options.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>)}
 
       {/* Table Section */}
       <div className="table-section">
