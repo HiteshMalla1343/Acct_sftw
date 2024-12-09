@@ -234,62 +234,62 @@ const Navbar = ({ onOpenWindow }) => {
           <a href="#master">Master</a>
           <div className="dropdown-content">
             <a href="#account" onClick={() => onOpenWindow("Account")}>Account</a>
-            <a href="#product" onClick={() => onOpenWindow("Product")}>Product</a>
-            <a href="#schedules" onClick={() => onOpenWindow("Schedules")}>Schedules</a>
+            <a href="/product" onClick={() => onOpenWindow("Product")}>Product</a>
+            <a href="/schedules" onClick={() => onOpenWindow("Schedules")}>Schedules</a>
             <a href="#customer-list" onClick={() => onOpenWindow("Customer List")}>Customer List</a>
-            <a href="#product-list" onClick={() => onOpenWindow("Product List")}>Product List</a>
-            <a href="#schedule-list" onClick={() => onOpenWindow("Schedule List")}>Schedule List</a>
-            <a href="#logout" onClick={() => onOpenWindow("Logout")}>Logout</a>
-            <a href="#exit" onClick={() => onOpenWindow("Exit")}>Exit</a>
+            <a href="/product-list" onClick={() => onOpenWindow("Product List")}>Product List</a>
+            <a href="/schedule-list" onClick={() => onOpenWindow("Schedule List")}>Schedule List</a>
+            <a href="/logout" onClick={() => onOpenWindow("Logout")}>Logout</a>
+            <a href="/exit" onClick={() => onOpenWindow("Exit")}>Exit</a>
             {/* Add other dropdown items here */}
           </div>
         </div>
         <div className="dropdown">
-          <a href="#inventoryr">Inventory</a>
+          <a href="/inventoryr">Inventory</a>
           <div className="dropdown-content">
-            <a href="#stock-entry" onClick={() => onOpenWindow("Stock Entry")}>Stock Entry</a>
-            <a href="#purchase" onClick={() => onOpenWindow("Purchase")}>Purchase</a>
-            <a href="#sales" onClick={() => onOpenWindow("Sales")}>Sales</a>
-            <a href="#digumathi" onClick={() => onOpenWindow("Digumathi")}>Digumathi</a>
-            <a href="#sale-patty" onClick={() => onOpenWindow("Sale Patty")}>Sale Patty</a>
-            <a href="#salepatty-list" onClick={() => onOpenWindow("Salepatty List")}>Salepatty List</a>
-            <a href="#salepatty-expenses" onClick={() => onOpenWindow("Salepatty Expenses")}>Salepatty Expenses</a>
-            <a href="#rate-wise-report" onClick={() => onOpenWindow("Rate Wise Report")}>Rate Wise Report</a>
-            <a href="#patty-stock" onClick={() => onOpenWindow("Patty Stock")}>Patty Stock</a>
-            <a href="#sales-stock" onClick={() => onOpenWindow("Sales Stock")}>Sales Stock</a>
+            <a href="/stock-entry" onClick={() => onOpenWindow("Stock Entry")}>Stock Entry</a>
+            <a href="/purchase" onClick={() => onOpenWindow("Purchase")}>Purchase</a>
+            <a href="/sales" onClick={() => onOpenWindow("Sales")}>Sales</a>
+            <a href="/digumathi" onClick={() => onOpenWindow("Digumathi")}>Digumathi</a>
+            <a href="/sale-patty" onClick={() => onOpenWindow("Sale Patty")}>Sale Patty</a>
+            <a href="/salepatty-list" onClick={() => onOpenWindow("Salepatty List")}>Salepatty List</a>
+            <a href="/salepatty-expenses" onClick={() => onOpenWindow("Salepatty Expenses")}>Salepatty Expenses</a>
+            <a href="/rate-wise-report" onClick={() => onOpenWindow("Rate Wise Report")}>Rate Wise Report</a>
+            <a href="/patty-stock" onClick={() => onOpenWindow("Patty Stock")}>Patty Stock</a>
+            <a href="/sales-stock" onClick={() => onOpenWindow("Sales Stock")}>Sales Stock</a>
             {/* Add other dropdown items here */}
           </div>
         </div>
         <div className="dropdown">
-          <a href="#finance">Finance</a>
+          <a href="/finance">Finance</a>
           <div className="dropdown-content">
-            <a href="#cash-entry" onClick={() => onOpenWindow("Cash Entry")}>Cash Entry</a>
-            <a href="#journal" onClick={() => onOpenWindow("Journal")}>Journal</a>
-            <a href="#bank-entry" onClick={() => onOpenWindow("Bank Entry")}>Bank Entry</a>
+            <a href="/cash-entry" onClick={() => onOpenWindow("Cash Entry")}>Cash Entry</a>
+            <a href="/journal" onClick={() => onOpenWindow("Journal")}>Journal</a>
+            <a href="/bank-entry" onClick={() => onOpenWindow("Bank Entry")}>Bank Entry</a>
             {/* Add other dropdown items here */}
           </div>
         </div>
         <div className="dropdown">
-          <a href="#reports">Reports</a>
+          <a href="/reports">Reports</a>
           <div className="dropdown-content">
-            <a href="#ledger" onClick={() => onOpenWindow("Ledger")}>Ledger</a>
-            <a href="#outstanding" onClick={() => onOpenWindow("Outstanding")}>Outstanding</a>
-            <a href="#bill-print-2" onClick={() => onOpenWindow("Bill Print - 2")}>Bill Print - 2</a>
-            <a href="#vasool-list" onClick={() => onOpenWindow("Vasool List")}>Vasool List</a>
-            <a href="#cash-list" onClick={() => onOpenWindow("Cash List")}>Cash List</a>
-            <a href="#sales-list" onClick={() => onOpenWindow("Sales List")}>Sales List</a>
-            <a href="#purchase-list" onClick={() => onOpenWindow("Purchase List")}>Purchase List</a>
-            <a href="#journal-list" onClick={() => onOpenWindow("Journal List")}>Journal List</a>
-            <a href="#bank-list" onClick={() => onOpenWindow("Bank List")}>Bank List</a>
-            <a href="#stock-entry-report" onClick={() => onOpenWindow("Stock Entry Report")}>Stock Entry Report</a>
-            <a href="#total-ledger" onClick={() => onOpenWindow("Total Ledger")}>Total Ledger</a>
-            <a href="#customer-status" onClick={() => onOpenWindow("Customer Status")}>Customer Status</a>
-            <a href="#stock-wise-report" onClick={() => onOpenWindow("Stock Wise Report")}>Stock Wise Report</a>
-            <a href="#day-wise-report" onClick={() => onOpenWindow("Day Wise Report")}>Day Wise Report</a>
-            <a href="#difference-quantity" onClick={() => onOpenWindow("Difference Quantity")}>Difference Quantity</a>
-            <a href="#difference-amount" onClick={() => onOpenWindow("Difference Amount")}>Difference Amount</a>
-            <a href="#bill-print" onClick={() => onOpenWindow("Bill Print")}>Bill Print</a>
-            <a href="#account-opening-balances" onClick={() => onOpenWindow("Account Opening Balances")}>Account Opening Balances</a>
+            <a href="/ledger" onClick={() => onOpenWindow("Ledger")}>Ledger</a>
+            <a href="/outstanding" onClick={() => onOpenWindow("Outstanding")}>Outstanding</a>
+            <a href="/bill-print-2" onClick={() => onOpenWindow("Bill Print - 2")}>Bill Print - 2</a>
+            <a href="/vasool-list" onClick={() => onOpenWindow("Vasool List")}>Vasool List</a>
+            <a href="/cash-list" onClick={() => onOpenWindow("Cash List")}>Cash List</a>
+            <a href="/sales-list" onClick={() => onOpenWindow("Sales List")}>Sales List</a>
+            <a href="/purchase-list" onClick={() => onOpenWindow("Purchase List")}>Purchase List</a>
+            <a href="/journal-list" onClick={() => onOpenWindow("Journal List")}>Journal List</a>
+            <a href="/bank-list" onClick={() => onOpenWindow("Bank List")}>Bank List</a>
+            <a href="/stock-entry-report" onClick={() => onOpenWindow("Stock Entry Report")}>Stock Entry Report</a>
+            <a href="/total-ledger" onClick={() => onOpenWindow("Total Ledger")}>Total Ledger</a>
+            <a href="/customer-status" onClick={() => onOpenWindow("Customer Status")}>Customer Status</a>
+            <a href="/stock-wise-report" onClick={() => onOpenWindow("Stock Wise Report")}>Stock Wise Report</a>
+            <a href="/day-wise-report" onClick={() => onOpenWindow("Day Wise Report")}>Day Wise Report</a>
+            <a href="/difference-quantity" onClick={() => onOpenWindow("Difference Quantity")}>Difference Quantity</a>
+            <a href="/difference-amount" onClick={() => onOpenWindow("Difference Amount")}>Difference Amount</a>
+            <a href="/bill-print" onClick={() => onOpenWindow("Bill Print")}>Bill Print</a>
+            <a href="/account-opening-balances" onClick={() => onOpenWindow("Account Opening Balances")}>Account Opening Balances</a>
             {/* Add other dropdown items here */}
           </div>
         </div>

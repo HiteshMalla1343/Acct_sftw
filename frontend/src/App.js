@@ -5,6 +5,8 @@ import DraggableWindow from "./components/DraggableWindow";
 import AccountWindow from "./components/AccountWindow";
 import ProductWindow from "./components/ProductWindow";
 import CustomerList from "./components/CustomerList";
+import { GlobalStateProvider } from './context/GlobalState'; // Path to your GlobalState file
+
 import "./App.css";
 
 const windowComponents = {
@@ -27,6 +29,7 @@ function App() {
   };
 
   return (
+    <GlobalStateProvider>
     <div className="App">
       <Navbar onOpenWindow={openWindow} />
       <Background />
@@ -45,6 +48,7 @@ function App() {
       );
     })}
     </div>
+    </GlobalStateProvider>
   );
 }
 
