@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field ,validator    
 from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi import FastAPI, HTTPException
@@ -21,17 +21,32 @@ class ProductModel(BaseModel):
 # Pydantic model for Account
 class AccountModel(BaseModel):
     id: Optional[str] = Field(None, alias="_id")
-    code: str
+    code: str 
     name: str
-    phone: str
-    city: str
-    credit: float
-    debit: float
+    phone: Optional[str] = None
+    city: Optional[str] = None
+    credit: Optional[float] = 0.0
+    debit: Optional[float] = 0.0
     schedule_name : str
     
-    # class Config:
-    #     # Use MongoDB's ObjectId as the id (automatically handled by MongoDB)
-    #     arbitrary_types_allowed = True
+
+async def validate_unique_account(account: AccountModel):
+    """
+    Validate that the account code and name are unique in the database
+    """
+    try:
+        # Check for existing account with the same code or name
+        existing_account_code = await account_collection.find_one({"code": account.code})
+        if existing_account_code:
+            raise HTTPException(status_code=400, detail="An account with this code already exists")
+
+        existing_account_name = await account_collection.find_one({"name": account.name})
+        if existing_account_name:
+            raise HTTPException(status_code=400, detail="An account with this name already exists")
+
+    except Exception as e:
+        print(f"Error validating account uniqueness: {e}")
+        raise HTTPException(status_code=500, detail="Error validating account")
 
 # CRUD Operations
 # Insert an account into the database
@@ -41,6 +56,7 @@ async def create_account(account: AccountModel):
    
     print("Data to insert:", account_data) 
     try:
+        await validate_unique_account(account)
         result = await account_collection.insert_one(account_data)
 
         # Create the response object with the newly inserted id

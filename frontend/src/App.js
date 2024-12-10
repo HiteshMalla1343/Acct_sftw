@@ -6,15 +6,18 @@ import AccountWindow from "./components/AccountWindow";
 import ProductWindow from "./components/ProductWindow";
 import CustomerList from "./components/CustomerList";
 import ScheduleWindow from "./components/ScheduleWindow";
+import StockNumberComponent from "./components/StockEntry"
 import { GlobalStateProvider } from './context/GlobalState'; // Path to your GlobalState file
 
 import "./App.css";
+import StockEntry from './components/StockEntry';
 
 const windowComponents = {
   "Account": { component: <AccountWindow />, defaultSize: { width: 600, height: 600 } },
   "Product": { component: <ProductWindow />, defaultSize: { width: 600, height: 450 } },
   "Customer List": { component: <CustomerList />, defaultSize: {width: 700 , height:700} },
   "Schedules": { component: <ScheduleWindow />, defaultSize: { width: 600, height: 600 }},
+  "Stock Entry" :{component: <StockEntry />, defaultSize: { width: 600, height: 600 }}
   // Add more window components here
 };
 

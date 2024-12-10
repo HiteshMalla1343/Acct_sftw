@@ -1,4 +1,4 @@
-// context/GlobalState.js
+    // context/GlobalState.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Create the Global Context
@@ -60,13 +60,10 @@ export const GlobalStateProvider = ({ children }) => {
       },
       body: JSON.stringify(accountData),
     });
-    console.log("hi");
-    console.log(response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const savedAccount = await response.json();
-    console.log(savedAccount);
     setAccounts((prevAccounts) => [...prevAccounts, savedAccount]);
   };
 
@@ -79,8 +76,6 @@ export const GlobalStateProvider = ({ children }) => {
       },
       body: JSON.stringify(Scheduledata),
     });
-    console.log("hi");
-    console.log(response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -97,8 +92,6 @@ export const GlobalStateProvider = ({ children }) => {
       },
       body: JSON.stringify(Productdata),
     });
-    console.log("hi");
-    console.log(response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

@@ -15,10 +15,11 @@ const [formData, setFormData] = useState({
   name: '',
   phone: '',
   city: '',
-  credit: '',
-  debit: '',
+  credit: 0,
+  debit: 0,
   schedule_name: ""
 });
+
 
 // Handle form input change
 const handleInputChange = (e) => {
@@ -32,17 +33,16 @@ const handleInputChange = (e) => {
 
 // Handle form submission to add a new account
 const handleSave = () => {
-  
-  if (formData.code && formData.name) {
-    console.log("Form Data: ", formData);
+  console.log("Form Data: ", formData);
+  if (formData.code && formData.name && formData.schedule_name) {
     addAccount(formData); // Add account to global state
     setFormData({
       code: '',
       name: '',
       phone: '',
       city: '',
-      credit: '',
-      debit: '',
+      credit: 0,
+      debit: 0,
       schedule_name: ""
     }); // Reset form after submission
   } else {
