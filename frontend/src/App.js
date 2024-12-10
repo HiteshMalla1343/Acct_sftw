@@ -16,6 +16,18 @@ const windowComponents = {
   // Add more window components here
 };
 
+function adjustBackgroundHeight() {
+  const navbar = document.getElementById("navbar");
+  const backgroundContainer = document.querySelector(".background-container");
+  if (navbar && backgroundContainer) {
+    const navbarHeight = navbar.offsetHeight;
+    backgroundContainer.style.height = `calc(100vh - ${navbarHeight}px)`;
+  }
+}
+
+// Adjust on page load and window resize
+window.addEventListener("load", adjustBackgroundHeight);
+window.addEventListener("resize", adjustBackgroundHeight);
 function App() {
   const [activeWindows, setActiveWindows] = useState([]);
   const openWindow = (windowName) => {
@@ -30,24 +42,46 @@ function App() {
 
   return (
     <GlobalStateProvider>
-    <div className="App">
-      <Navbar onOpenWindow={openWindow} />
-      <Background />
-      {activeWindows.map((windowName) => {
-      console.log(windowName);
-      const { component, defaultSize } = windowComponents[windowName];
-      return (
-        <DraggableWindow
-          key={windowName}
-          title={`${windowName} Window`}
-          onClose={() => closeWindow(windowName)}
-          initialSize={defaultSize}
-        >
-          {component}
-        </DraggableWindow>
-      );
-    })}
-    </div>
+      {/* <div className="App">
+        <Navbar onOpenWindow={openWindow} />
+        <Background />
+        {activeWindows.map((windowName) => {
+        console.log(windowName);
+        const { component, defaultSize } = windowComponents[windowName];
+        return (
+          <DraggableWindow
+            key={windowName}
+            title={`${windowName} Window`}
+            onClose={() => closeWindow(windowName)}
+            initialSize={defaultSize}
+          >
+            {component}
+          </DraggableWindow>
+        );
+      })}
+      </div> */}
+      <div className="App">
+        <div id="navbar" className="navbar-container">
+          <Navbar onOpenWindow={openWindow} />
+        </div>
+        <div className="background-container">
+          <Background />
+          {activeWindows.map((windowName) => {
+            const { component, defaultSize } = windowComponents[windowName];
+            return (
+                <DraggableWindow
+                  key={windowName}
+                  title={`${windowName} Window`}
+                  onClose={() => closeWindow(windowName)}
+                  initialSize={defaultSize}
+                  bounds=".background-container" // Restrict movement to the background
+                >
+                  {component}
+                </DraggableWindow>
+              );
+            })}
+        </div>
+      </div>  
     </GlobalStateProvider>
   );
 }

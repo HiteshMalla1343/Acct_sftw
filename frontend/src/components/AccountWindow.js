@@ -133,7 +133,7 @@ return (
     </div>
 
     {/* Display the list of accounts */}
-    <div className="accounts-list">
+    {/* <div className="accounts-list">
       <h2>Accounts List</h2>
       {accounts.length === 0 ? (
         <p>No accounts available.</p>
@@ -146,7 +146,7 @@ return (
           ))}
         </ul>
       )}
-    </div>
+    </div> */}
   </div>
 );
 };

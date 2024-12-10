@@ -155,7 +155,7 @@ const CustomerList = () => {
                   <td>{customer.city}</td> {/* Correct field */}
                   <td>{customer.schedule_name}</td>
                   <td>
-                    <button onClick={() => handleDelete(customer.code)}>Delete</button>
+                    <button onClick={() => handleDelete(customer._id)}>Delete</button>
                   </td>
                 </tr>
               ))}

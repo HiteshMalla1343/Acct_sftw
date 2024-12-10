@@ -1,16 +1,28 @@
-/* Ensure the body and html take the full height */
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  font-size: 16px; /* base font-size for rem calculations */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-}
-
-/* Container for the full screen layout */
 .App {
+  height: 100vh; /* Full height of the viewport */
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  overflow: hidden; /* Prevent draggable windows from causing scrollbars */
+}
+
+.navbar-container {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.background-container {
+  position: relative; /* Required for child elements to respect bounds */
+  overflow: hidden; /* Prevent child elements from spilling outside */
+  /* background: #f0f0f0; Adjust as needed */
+}
+
+/* Optional: Add styles for DraggableWindow */
+.draggable-window {
+  position: absolute;
+  z-index: 11;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

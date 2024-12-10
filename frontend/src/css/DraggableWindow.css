@@ -1,13 +1,12 @@
 .draggable-resizable-window {
-    position: fixed;
+    position: absolute;
     background: #f4f4f4;
     border: 1px solid #ccc;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     overflow: hidden;
-    max-width: calc(100% - 20px); /* Prevent window from exceeding the screen width */
-    max-height: calc(100% - 20px); /* Prevent window from exceeding the screen height */
-    z-index: 11;
+    max-width: 100%; /* Prevent window from exceeding the width of the container */
+    max-height: 100%; /* Prevent window from exceeding the height of the container */
   }
   
   

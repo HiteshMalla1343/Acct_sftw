@@ -3,7 +3,8 @@ from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi import FastAPI, HTTPException
 from .database import db  # Assuming you have the database connection setup
-
+from bson.objectid import ObjectId
+from pymongo.errors import PyMongoError
 
 # MongoDB collection reference
 account_collection = db.Account  # Replace 'accounts' with your actual collection name
@@ -56,10 +57,23 @@ async def get_accounts():
         print(f"Accounts fetched: {accounts}")  # Add logging to inspect the fetched data
 
         # If accounts are returned, convert them to the required format
-        return [{key: value for key, value in account.items() if key != "_id"} for account in accounts]
+        accounts_cleaned = [{**account, "_id": str(account["_id"])} for account in accounts]
+        return accounts_cleaned
     except Exception as e:
         print(f"Error fetching accounts: {e}")  # Log the specific error
         raise HTTPException(status_code=500, detail="Failed to fetch accounts")
+
+async def delete_account_by_id(id: str) -> bool:
+    try:
+        # Convert string ID to ObjectId
+        object_id = ObjectId(id)
+
+        # Delete the document with the matching _id
+        result = await account_collection.delete_one({"_id": object_id})
+        return result.deleted_count > 0  # Returns True if a document was deleted
+    except PyMongoError as e:
+        print(f"Error deleting account: {e}")
+        raise HTTPException(status_code=500, detail="Failed to delete account")
 
 
 async def get_schedules():

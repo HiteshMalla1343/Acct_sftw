@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from typing import List
-from .db_model import AccountModel, create_account, get_accounts,ScheduleModel , get_schedules
+from .db_model import AccountModel, create_account, get_accounts,ScheduleModel , get_schedules, delete_account_by_id
 from fastapi import FastAPI, HTTPException
 
 router = APIRouter()
@@ -29,6 +29,16 @@ async def fetch_accounts():
     accounts = await get_accounts()
     return accounts
 
+@router.delete("/accounts/{id}")
+async def delete_account(id: str):
+    try:
+        result = await delete_account_by_id(id)
+        if result:
+            return {"message": f"Account with _id {id} deleted successfully"}
+        else:
+            raise HTTPException(status_code=404, detail=f"Account with _id {id} not found")
+    except InvalidId:
+        raise HTTPException(status_code=400, detail="Invalid _id format")
 
 @router.get("/schedules",response_model=List[ScheduleModel])
 async def fetch_schedules():
