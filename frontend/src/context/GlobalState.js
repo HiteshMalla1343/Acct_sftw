@@ -9,7 +9,7 @@ export const GlobalStateProvider = ({ children }) => {
   // Initial global state for accounts
   const [accounts, setAccounts] = useState([]);
   const [schedules, setSchedules] = useState([]); // Add a state for schedules
-
+  const [products, setProducts] = useState([]);
   // Function to fetch schedules from the backend
   const fetchSchedules = async () => {
     try {
@@ -24,7 +24,19 @@ export const GlobalStateProvider = ({ children }) => {
       console.error('Error fetching schedules:', error);
     }
   };
-
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/products');
+      // console.log(response);
+      const data = await response.json();
+      // console.log(data);
+      console.log("puskii");
+      console.log(data);
+      setProducts(data); // Set the fetched schedules in global state
+    } catch (error) {
+      console.error('Error fetching schedules:', error);
+    }
+  };
   const fetchAccounts = async () => {
     try {
       const response = await fetch('http://localhost:8000/accounts');
@@ -58,22 +70,6 @@ export const GlobalStateProvider = ({ children }) => {
     setAccounts((prevAccounts) => [...prevAccounts, savedAccount]);
   };
 
-  // Function to update an account (modify)
-  const updateAccount = (updatedAccount) => {
-    setAccounts((prevAccounts) =>
-      prevAccounts.map((account) =>
-        account.code === updatedAccount.code ? updatedAccount : account
-      )
-    );
-  };
-
-  // Function to delete an account
-  const deleteAccount = (accountCode) => {
-    setAccounts((prevAccounts) =>
-      prevAccounts.filter((account) => account.code !== accountCode)
-    );
-  };
-
   const addSchedule =async (Scheduledata) => {
     console.log(Scheduledata);
     const response = await fetch('http://localhost:8000/schedules', {
@@ -92,18 +88,37 @@ export const GlobalStateProvider = ({ children }) => {
     setSchedules((prevSchedules) => [...prevSchedules, savedSchedule]);
     fetchSchedules();
   };
+  const addProduct =async (Productdata) => {
+    console.log(Productdata);
+    const response = await fetch('http://localhost:8000/products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(Productdata),
+    });
+    console.log("hi");
+    console.log(response);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const savedProduct = await response.json();
+    setProducts((prevProducts) => [...prevProducts, savedProduct]);
+    fetchProducts();
+  };
   // Provide the state and functions to the rest of the app
   return (
     <GlobalStateContext.Provider
       value={{
         accounts,
         schedules, 
+        products,
         addAccount,
-        updateAccount,
-        deleteAccount,
         fetchSchedules,
+        fetchProducts,
         fetchAccounts,
         addSchedule,  
+        addProduct,  
       }}
     >
       {children}

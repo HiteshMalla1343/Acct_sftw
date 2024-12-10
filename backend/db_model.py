@@ -9,10 +9,15 @@ from pymongo.errors import PyMongoError
 # MongoDB collection reference
 account_collection = db.Account  # Replace 'accounts' with your actual collection name
 schedule_collection = db.schedules # Replace 'schedules' with your
+product_collection = db.products # Replace 'products' with your
 
 class ScheduleModel(BaseModel):
     id: Optional[str] = Field(None, alias="_id")
     schedule_name : str
+    
+class ProductModel(BaseModel):
+    id: Optional[str] = Field(None, alias="_id")
+    product_name : str    
 # Pydantic model for Account
 class AccountModel(BaseModel):
     id: Optional[str] = Field(None, alias="_id")
@@ -88,6 +93,18 @@ async def delete_schedule_by_id(id: str) -> bool:
     except PyMongoError as e:
         print(f"Error deleting account: {e}")
         raise HTTPException(status_code=500, detail="Failed to delete account")    
+    
+async def delete_product_by_id(id: str) -> bool:
+    try:
+        # Convert string ID to ObjectId
+        object_id = ObjectId(id)
+
+        # Delete the document with the matching _id
+        result = await product_collection.delete_one({"_id": object_id})
+        return result.deleted_count > 0  # Returns True if a document was deleted
+    except PyMongoError as e:
+        print(f"Error deleting account: {e}")
+        raise HTTPException(status_code=500, detail="Failed to delete account")        
 
 
 async def get_schedules():
@@ -123,3 +140,32 @@ async def create_schedule(schedule: ScheduleModel):
     except Exception as e:
         print(f"Error inserting document: {e}")
         raise HTTPException(status_code=500, detail="Failed to create account")   
+
+
+async def create_product(product: ProductModel):
+    
+    product_data = product.dict(by_alias=True)  # Use aliases (e.g., "_id")
+    product_data.pop("_id", None)
+   
+    print("Data to insert:", product_data) 
+    try:
+        result = await product_collection.insert_one(product_data)
+
+        created_product_data = product.dict()  # Start with the original account data
+        created_product_data["id"] = str(result.inserted_id)  # Add the inserted id
+        return ProductModel(**created_product_data)  # Construct the AccountModel
+    except Exception as e:
+        print(f"Error inserting document: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create account")   
+        
+async def get_products():
+    try:
+        products_cursor = product_collection.find()  # You can add projection here to limit fields
+        products = await products_cursor.to_list(length=100)  # Use await on to_list()
+
+        products_cleaned = [{"s_no": idx + 1, **item, "_id": str(item["_id"])} for idx, item in enumerate(products)]
+        print(f"Products fetched: {products_cleaned}")
+        return products_cleaned
+    except Exception as e:
+        print(f"Error fetching schedules: {e}")  # Log the specific error
+        raise HTTPException(status_code=500, detail="Failed to fetch schedules")    
