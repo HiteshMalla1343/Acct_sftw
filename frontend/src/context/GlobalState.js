@@ -17,6 +17,8 @@ export const GlobalStateProvider = ({ children }) => {
       // console.log(response);
       const data = await response.json();
       // console.log(data);
+      console.log("puski");
+      console.log(data);
       setSchedules(data); // Set the fetched schedules in global state
     } catch (error) {
       console.error('Error fetching schedules:', error);
@@ -29,6 +31,7 @@ export const GlobalStateProvider = ({ children }) => {
       // console.log(response);
       const data = await response.json();
       // console.log(data);
+      
       setAccounts(data); // Set the fetched schedules in global state
     } catch (error) {
       console.error('Error fetching schedules:', error);
@@ -51,6 +54,7 @@ export const GlobalStateProvider = ({ children }) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const savedAccount = await response.json();
+    console.log(savedAccount);
     setAccounts((prevAccounts) => [...prevAccounts, savedAccount]);
   };
 
@@ -70,6 +74,24 @@ export const GlobalStateProvider = ({ children }) => {
     );
   };
 
+  const addSchedule =async (Scheduledata) => {
+    console.log(Scheduledata);
+    const response = await fetch('http://localhost:8000/schedules', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(Scheduledata),
+    });
+    console.log("hi");
+    console.log(response);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const savedSchedule = await response.json();
+    setSchedules((prevSchedules) => [...prevSchedules, savedSchedule]);
+    fetchSchedules();
+  };
   // Provide the state and functions to the rest of the app
   return (
     <GlobalStateContext.Provider
@@ -80,7 +102,8 @@ export const GlobalStateProvider = ({ children }) => {
         updateAccount,
         deleteAccount,
         fetchSchedules,
-        fetchAccounts
+        fetchAccounts,
+        addSchedule,  
       }}
     >
       {children}

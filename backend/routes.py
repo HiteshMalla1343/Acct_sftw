@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 from typing import List
-from .db_model import AccountModel, create_account, get_accounts,ScheduleModel , get_schedules, delete_account_by_id
+from .db_model import AccountModel, create_account, get_accounts,ScheduleModel , get_schedules, delete_account_by_id,delete_schedule_by_id,create_schedule
 from fastapi import FastAPI, HTTPException
+from bson.errors import InvalidId
 
 router = APIRouter()
 
@@ -17,6 +18,7 @@ async def add_account(account: AccountModel):
     account_id = await create_account(account)
     account.id = account_id  # Attach the generated account ID to the response
     return account
+
 
 # GET endpoint to fetch all accounts
 
@@ -40,9 +42,27 @@ async def delete_account(id: str):
     except InvalidId:
         raise HTTPException(status_code=400, detail="Invalid _id format")
 
-@router.get("/schedules",response_model=List[ScheduleModel])
+@router.post("/schedules", response_model=ScheduleModel)
+async def add_schedule(account: ScheduleModel):
+    print(account)
+    account_id = await create_schedule(account)
+    account.id = account_id  # Attach the generated account ID to the response
+    return account    
+@router.delete("/schedules/{id}")
+async def delete_account(id: str):
+    try:
+        result = await delete_schedule_by_id(id)
+        if result:
+            return {"message": f"Schedule with _id {id} deleted successfully"}
+        else:
+            raise HTTPException(status_code=404, detail=f"Schedule with _id {id} not found")
+    except InvalidId:
+        raise HTTPException(status_code=400, detail="Invalid _id format")    
+
+@router.get("/schedules")
 async def fetch_schedules():
     schedules = await get_schedules()
+    print(schedules)
     return schedules
 
 

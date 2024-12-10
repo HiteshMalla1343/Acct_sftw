@@ -5,6 +5,7 @@ import DraggableWindow from "./components/DraggableWindow";
 import AccountWindow from "./components/AccountWindow";
 import ProductWindow from "./components/ProductWindow";
 import CustomerList from "./components/CustomerList";
+import ScheduleWindow from "./components/ScheduleWindow";
 import { GlobalStateProvider } from './context/GlobalState'; // Path to your GlobalState file
 
 import "./App.css";
@@ -13,6 +14,7 @@ const windowComponents = {
   "Account": { component: <AccountWindow />, defaultSize: { width: 600, height: 600 } },
   "Product": { component: <ProductWindow />, defaultSize: { width: 600, height: 450 } },
   "Customer List": { component: <CustomerList />, defaultSize: {width: 700 , height:700} },
+  "Schedules": { component: <ScheduleWindow />, defaultSize: { width: 600, height: 600 }},
   // Add more window components here
 };
 
@@ -42,24 +44,6 @@ function App() {
 
   return (
     <GlobalStateProvider>
-      {/* <div className="App">
-        <Navbar onOpenWindow={openWindow} />
-        <Background />
-        {activeWindows.map((windowName) => {
-        console.log(windowName);
-        const { component, defaultSize } = windowComponents[windowName];
-        return (
-          <DraggableWindow
-            key={windowName}
-            title={`${windowName} Window`}
-            onClose={() => closeWindow(windowName)}
-            initialSize={defaultSize}
-          >
-            {component}
-          </DraggableWindow>
-        );
-      })}
-      </div> */}
       <div className="App">
         <div id="navbar" className="navbar-container">
           <Navbar onOpenWindow={openWindow} />

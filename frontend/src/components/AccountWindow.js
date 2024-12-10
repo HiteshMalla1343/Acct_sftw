@@ -17,15 +17,16 @@ const [formData, setFormData] = useState({
   city: '',
   credit: '',
   debit: '',
-  schedule_id: ""
+  schedule_name: ""
 });
 
 // Handle form input change
 const handleInputChange = (e) => {
   const { name, value } = e.target;
+
   setFormData((prevData) => ({
     ...prevData,
-    [name]: value,
+    [name]: value.toUpperCase(),
   }));
 };
 
@@ -120,7 +121,7 @@ return (
         >
           <option value="">Select Schedule</option>
           {schedules.map((schedule) => (
-            <option key={schedule._id} value={schedule._id}>
+            <option key={schedule._id} value={schedule.schedule_name}>
               {schedule.schedule_name} {/* Accessing schedule_name */}
             </option>
           ))}
