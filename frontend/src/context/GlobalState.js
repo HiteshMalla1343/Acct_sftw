@@ -51,20 +51,29 @@ export const GlobalStateProvider = ({ children }) => {
   };
 
   // Function to add an account
-  const addAccount =async (accountData) => {
+  const addAccount = async (accountData) => {
     console.log(accountData);
-    const response = await fetch('http://localhost:8000/accounts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(accountData),
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      const response = await fetch('http://localhost:8000/accounts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(accountData),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json(); // Extract error details from the backend
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+  
+      const savedAccount = await response.json();
+      setAccounts((prevAccounts) => [...prevAccounts, savedAccount]);
+      return savedAccount;
+    } catch (error) {
+      console.error('Error adding account:', error.message);
+      throw error; // Re-throw error to let the caller handle it
     }
-    const savedAccount = await response.json();
-    setAccounts((prevAccounts) => [...prevAccounts, savedAccount]);
   };
 
   const addSchedule =async (Scheduledata) => {

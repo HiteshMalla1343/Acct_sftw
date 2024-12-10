@@ -1,89 +1,200 @@
-/* Container */
-.stock-entry-container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+/* Main container styling */
+.stock-entry-form {
+  padding: 10px;
+  background-color: #f4f4f4;
+}
+/* General input styling */
+.form-input,
+.form-select {
+  height: 30px; /* Set a consistent height */
+  padding: 5px 10px;
+  font-size: 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Styling for labels */
+.form-label {
+  font-size: 7px;
+  font-weight: bold;
+  line-height: 40px; /* Match input height */
+  margin-bottom: 8px;
+  display: inline-block; /* Ensure proper alignment */
+}
+
+/* Ensure alignment between label and input */
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between label and input */
+  margin-bottom: 10px;
+}
+
+/* Container adjustments */
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Vertical alignment for grouped fields */
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Top section: Date field aligned to the right */
+.top-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.top-section label {
+  font-size: medium;
+}
+
+/* Bottom section: 3 columns layout */
+.bottom-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Columns */
+.form-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Form labels and inputs */
+.form-column label {
+  margin-bottom: 1rem;
+  font-size: medium;
+}
+
+.form-input {
+  width: 100%;
+  padding: 5px;
+  font-size: large;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-select {
+  width: 100%;
+  padding: 5px;
+  font-size: medium;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Background colors for inputs */
+.form-input.stock-no {
+  background-color: #ffe4e1;
+}
+
+.form-input.bags,
+.form-input.vehicle {
+  background-color: #ffffcc;
+}
+
+.form-select.type {
+  background-color: #ffe4b5;
+}
+
+.form-input.kirai {
+  background-color: #ccffcc;
+}
+
+.form-input.village {
+  background-color: #ffe4e1;
+}
+
+.form-input.exp {
+  background-color: #ffe4e1;
+}
+
+/* Checkbox styling */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Submit button styling */
+.submit-button {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+
   
-  /* Title */
-  .stock-entry-title {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  /* Form */
-  .stock-entry-form {
-    margin-bottom: 20px;
-    background-color: #ffffff;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  .form-group {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .form-label {
-    font-size: 14px;
-    margin-right: 10px;
-  }
-  
-  .form-input,
-  .form-select {
-    width: 70%;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  /* Button */
-  .submit-button {
-    padding: 10px 20px;
-    font-size: 14px;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Table */
-  .stock-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .stock-table th,
-  .stock-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  .stock-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-  }
-  
-  .stock-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .stock-table tr:hover {
-    background-color: #f1f1f1;
-  }
-  
+.stocklist {
+  padding: 10px;
+  background-color: #f4f4f4;
+}
+
+/* Table section styling */
+.table-section {
+  margin-top: 10px;
+  border-top: 2px solid red;
+  padding-top: 10px;
+}
+
+.table-container {
+  margin: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom table styling */
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.custom-table th,
+.custom-table td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 8px;
+}
+
+.custom-table th {
+  background-color: #ffffcc;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.custom-table td {
+  background-color: #ffffff;
+  font-size: 13px;
+}
+
+.custom-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.custom-table tr:hover {
+  background-color: #e6f7ff;
+}

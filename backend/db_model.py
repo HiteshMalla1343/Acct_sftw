@@ -34,38 +34,51 @@ async def validate_unique_account(account: AccountModel):
     """
     Validate that the account code and name are unique in the database
     """
-    try:
-        # Check for existing account with the same code or name
-        existing_account_code = await account_collection.find_one({"code": account.code})
-        if existing_account_code:
-            raise HTTPException(status_code=400, detail="An account with this code already exists")
+    # Check for existing account with the same code
+    existing_account_code = await account_collection.find_one({"code": account.code})
+    if existing_account_code:
+        raise HTTPException(
+            status_code=400, detail="An account with this code already exists"
+        )
 
-        existing_account_name = await account_collection.find_one({"name": account.name})
-        if existing_account_name:
-            raise HTTPException(status_code=400, detail="An account with this name already exists")
+    # Check for existing account with the same name
+    existing_account_name = await account_collection.find_one({"name": account.name})
+    if existing_account_name:
+        raise HTTPException(
+            status_code=400, detail="An account with this name already exists"
+        )
 
-    except Exception as e:
-        print(f"Error validating account uniqueness: {e}")
-        raise HTTPException(status_code=500, detail="Error validating account")
 
-# CRUD Operations
-# Insert an account into the database
 async def create_account(account: AccountModel):
+    """
+    Insert an account into the database
+    """
     account_data = account.dict(by_alias=True)  # Use aliases (e.g., "_id")
     account_data.pop("_id", None)
-   
-    print("Data to insert:", account_data) 
+
+    print("Data to insert:", account_data)
     try:
+        # Validate unique account
         await validate_unique_account(account)
+
+        # Insert into the database
         result = await account_collection.insert_one(account_data)
 
         # Create the response object with the newly inserted id
         created_account_data = account.dict()  # Start with the original account data
         created_account_data["id"] = str(result.inserted_id)  # Add the inserted id
         return AccountModel(**created_account_data)  # Construct the AccountModel
+
+    except HTTPException as http_exc:
+        # Log the specific error
+        print(f"Validation error: {http_exc.detail}")
+        raise http_exc  # Re-raise the HTTPException to retain its message
+
     except Exception as e:
+        # Handle other exceptions and log them
         print(f"Error inserting document: {e}")
         raise HTTPException(status_code=500, detail="Failed to create account")
+
     
 
 

@@ -32,23 +32,38 @@ const handleInputChange = (e) => {
 };
 
 // Handle form submission to add a new account
-const handleSave = () => {
+const handleSave = async () => {
   console.log("Form Data: ", formData);
+
   if (formData.code && formData.name && formData.schedule_name) {
-    addAccount(formData); // Add account to global state
-    setFormData({
-      code: '',
-      name: '',
-      phone: '',
-      city: '',
-      credit: 0,
-      debit: 0,
-      schedule_name: ""
-    }); // Reset form after submission
+    // Validate that the code and name start with the same letter
+    if (formData.code[0] !== formData.name[0]) {
+      alert('Code and Name should start with the same letter');
+      return;
+    }
+
+    try {
+      await addAccount(formData); // Try to add the account
+      alert('Account added successfully!');
+      // Reset the form after successful submission
+      setFormData({
+        code: '',
+        name: '',
+        phone: '',
+        city: '',
+        credit: 0,
+        debit: 0,
+        schedule_name: "",
+      });
+    } catch (error) {
+      // Display backend validation errors or generic errors
+      alert(`Failed to add account: ${error.message}`);
+    }
   } else {
     alert('Please fill in all required fields');
   }
 };
+
 
 return (
   <div className="account-window">

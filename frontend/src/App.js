@@ -14,10 +14,10 @@ import StockEntry from './components/StockEntry';
 
 const windowComponents = {
   "Account": { component: <AccountWindow />, defaultSize: { width: 600, height: 600 } },
-  "Product": { component: <ProductWindow />, defaultSize: { width: 600, height: 450 } },
+  "Product": { component: <ProductWindow />, defaultSize: { width: 600, height: 600 } },
   "Customer List": { component: <CustomerList />, defaultSize: {width: 700 , height:700} },
   "Schedules": { component: <ScheduleWindow />, defaultSize: { width: 600, height: 600 }},
-  "Stock Entry" :{component: <StockEntry />, defaultSize: { width: 600, height: 600 }}
+  "Stock Entry" :{component: <StockEntry />, defaultSize: { width: 1000, height: 600 }}
   // Add more window components here
 };
 
