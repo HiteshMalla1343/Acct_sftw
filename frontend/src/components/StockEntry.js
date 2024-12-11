@@ -180,120 +180,188 @@ const StockEntry = () => {
   <div className="bottom-section">
     {/* <!-- First Column --> */}
     <div className="form-column">
-      <label className="form-label">
-        Stock No:
-        <input
-          type="text"
-          name="stockNo"
-          value={formData.stockNo}
-          onChange={handleInputChange}
-          required
-          className="form-input"
-        />
-      </label>
-      <label className="form-label">
-        Bags:
-        <input
-          type="number"
-          name="bags"
-          value={formData.bags}
-          onChange={handleInputChange}
-          required
-          className="form-input"
-        />
-      </label>
-      <label className="form-label">
-        Vehicle:
-        <input
-          type="text"
-          name="vehicle"
-          value={formData.vehicle}
-          onChange={handleInputChange}
-          required
-          className="form-input"
-        />
-      </label>
+    <div className="form-group">
+          <div className="label-container">
+            <label className="form-label" htmlFor="stockNo">
+              Stock No:
+            </label>
+          </div>
+          <div className="input-container">
+            <input
+              type="text"
+              id="stockNo"
+              name="stockNo"
+              value={formData.stockNo}
+              onChange={handleInputChange}
+              required
+              className="form-input"
+            />
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="label-container">
+            <label className="form-label" htmlFor="bags">
+              Bags:
+            </label>
+          </div>
+          <div className="input-container">
+            <input
+              type="number"
+              id="bags"
+              name="bags"
+              value={formData.bags}
+              onChange={handleInputChange}
+              required
+              className="form-input"
+            />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <div className="label-container">
+            <label className="form-label" htmlFor="vehicle">
+              Vehicle:
+            </label>
+          </div>
+          <div className="input-container">
+            <input
+              type="text"
+              id="vehicle"
+              name="vehicle"
+              value={formData.vehicle}
+              onChange={handleInputChange}
+              required
+              className="form-input"
+            />
+          </div>
+        </div>
     </div>
 
     {/* <!-- Second Column --> */}
     <div className="form-column">
-      <label className="form-label">
-        Product:
-        <select
-          name="product"
-          value={formData.product}
-          onChange={handleInputChange}
-          className="form-select"
-        >
-          <option value="Product 1">Product 1</option>
-          <option value="Product 2">Product 2</option>
-        </select>
-      </label>
-      <label className="form-label">
-        Kirai:
-        <input
-          type="number"
-          name="kirai"
-          value={formData.kirai}
-          onChange={handleInputChange}
-          required
-          className="form-input"
-        />
-      </label>
-      <label className="form-label">
-        Village/City:
-        <input
-          type="text"
-          name="village"
-          value={formData.village}
-          onChange={handleInputChange}
-          required
-          className="form-input"
-        />
-      </label>
+    <div className="form-group">
+  <div className="label-container">
+    <label className="form-label" htmlFor="product">
+      Product:
+    </label>
+  </div>
+  <div className="input-container">
+    <select
+      id="product"
+      name="product"
+      value={formData.product}
+      onChange={handleInputChange}
+      className="form-select"
+    >
+      <option value="Product 1">Product 1</option>
+      <option value="Product 2">Product 2</option>
+    </select>
+  </div>
+</div>
+
+<div className="form-group">
+  <div className="label-container">
+    <label className="form-label" htmlFor="kirai">
+      Kirai:
+    </label>
+  </div>
+  <div className="input-container">
+    <input
+      type="number"
+      id="kirai"
+      name="kirai"
+      value={formData.kirai}
+      onChange={handleInputChange}
+      required
+      className="form-input"
+    />
+  </div>
+</div>
+
+<div className="form-group">
+  <div className="label-container">
+    <label className="form-label" htmlFor="village">
+      Village/City:
+    </label>
+  </div>
+  <div className="input-container">
+    <input
+      type="text"
+      id="village"
+      name="village"
+      value={formData.village}
+      onChange={handleInputChange}
+      required
+      className="form-input"
+    />
+  </div>
+</div>
+
     </div>
 
     {/* <!-- Third Column --> */}
     <div className="form-column">
-      <label className="form-label">
-        Type:
-        <select
-          name="type"
-          value={formData.type}
-          onChange={handleInputChange}
-          className="form-select"
-        >
-          <option value="Commission">Commission</option>
-          <option value="Stock Clear">Stock Clear</option>
-        </select>
-      </label>
-      <label className="form-label">
-        Exp:
-        <input
-          type="number"
-          name="exp"
-          value={formData.exp}
-          onChange={handleInputChange}
-          required
-          className="form-input"
-        />
-      </label>
-      <label className="form-label checkbox-label">
-        <input
-          type="checkbox"
-          name="stockClear"
-          checked={formData.stockClear}
-          onChange={(e) => setFormData({ ...formData, stockClear: e.target.checked })}
-        />
-        Stock Clear
-      </label>
+    <div className="form-group">
+  <div className="label-container">
+    <label className="form-label" htmlFor="type">
+      Type:
+    </label>
+  </div>
+  <div className="input-container">
+    <select
+      name="type"
+      id="type"
+      value={formData.type}
+      onChange={handleInputChange}
+      className="form-select"
+    >
+      <option value="Commission">Commission</option>
+      <option value="Stock Clear">Stock Clear</option>
+    </select>
+  </div>
+</div>
+
+<div className="form-group">
+  <div className="label-container">
+    <label className="form-label" htmlFor="exp">
+      Exp:
+    </label>
+  </div>
+  <div className="input-container">
+    <input
+      type="number"
+      name="exp"
+      id="exp"
+      value={formData.exp}
+      onChange={handleInputChange}
+      required
+      className="form-input"
+    />
+  </div>
+</div>
+
+<div className="form-group">
+  <div className="label-container checkbox-container">
+    <label className="form-label checkbox-label">
+    Stock Clear
+      <input
+        type="checkbox"
+        name="stockClear"
+        checked={formData.stockClear}
+        onChange={(e) => setFormData({ ...formData, stockClear: e.target.checked })}
+        className="form-checkbox"
+      />
+      
+    </label>
+  </div>
+</div>
+
     </div>
   </div>
-
-  
-  <button type="submit" className="submit-button">
-    Save
-  </button>
+  <div className="button-section submit-button">
+    <button onClick={handleSave}>Save</button>
+    <button onClick={handleDelete}>Delete</button>
+  </div>
 </form>
 
       {/* <table className="stock-table">
@@ -320,11 +388,8 @@ const StockEntry = () => {
           ))}
         </tbody>
       </table> */}
-  <div className="stocklist bold-text">
-      <div className="button-section submit-button">
-        <button onClick={handleSave}>Save</button>
-        <button onClick={handleDelete}>Delete</button>
-      </div>
+      <div className="stocklist bold-text">
+        
 
       {/* Table Section for Displaying Stock Data */}
       <div className="table-section">

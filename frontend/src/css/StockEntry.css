@@ -4,25 +4,61 @@
   background-color: #f4f4f4;
 }
 /* General input styling */
-.form-input,
+/* .form-input,
 .form-select {
-  height: 30px; /* Set a consistent height */
+  height: 30px; 
   padding: 5px 10px;
   font-size: 7px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
+} */
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
+.label-container {
+  flex: 1;
+  text-align: center; /* Aligns labels to the right */
+  padding-right: 10px; /* Adds spacing between label and input */
+}
+
+.input-container {
+  flex: 2;
+}
+
+.form-group {
+  display: flex; /* Use flexbox for horizontal alignment */
+  align-items: center; /* Vertically center items */
+  gap: 10px; /* Add spacing between label and input */
+  margin-bottom: 15px; /* Add spacing between rows */
+}
 /* Styling for labels */
 .form-label {
   font-size: 7px;
   font-weight: bold;
-  line-height: 40px; /* Match input height */
-  margin-bottom: 8px;
-  display: inline-block; /* Ensure proper alignment */
-}
+  line-height: 40px; 
+  margin-bottom: 8px; 
+  display: inline-block; 
+}  
 
+/* .form-label {
+  font-size: medium;
+  font-weight: bold;
+  white-space: nowrap;
+} */
+
+/* Input styling */
+/* .form-input,.form-select {
+  flex: 1; 
+  padding: 8px;
+  font-size: medium;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+} */
 /* Ensure alignment between label and input */
 .form-group {
   display: flex;
@@ -127,20 +163,24 @@
 }
 
 /* Submit button styling */
-.submit-button {
-  margin-top: 20px;
-  padding: 10px;
-  font-size: 16px;
-  width: 100%;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.button-section {
+  display: flex;
+  justify-content: space-evenly; /* Adjusts spacing between buttons */
+  gap: 1rem; /* Adds spacing between buttons */
+  align-items: center; /* Vertically centers the buttons */
 }
 
-.submit-button:hover {
-  background-color: #0056b3;
+.button-section button {
+  padding: 0.5rem 1rem; /* Adds padding inside the buttons */
+  font-size: 1rem; /* Ensures consistent font size */
+  cursor: pointer; /* Changes cursor to pointer for better UX */
+  border: 1px solid #ccc; /* Adds a subtle border */
+  background-color: #f5f5f5; /* Adds a background color */
+  transition: background-color 0.3s ease; /* Adds hover effect */
+}
+
+.button-section button:hover {
+  background-color: #e0e0e0; /* Lightens the background color on hover */
 }
 
 
