@@ -1,170 +1,153 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useGlobalState } from '../context/GlobalState'; // Import the custom hook
-
+import React, { useState, useImperativeHandle, forwardRef ,useEffect} from "react";
+import { useGlobalState } from '../context/GlobalState';
 import "../css/AccountWindow.css";
-const AccountWindow = () => {
-const { addAccount, accounts ,schedules, fetchSchedules} = useGlobalState(); // Access the global state and functions
+
+const AccountWindow = (props, ref) => {
+  const globalState = useGlobalState();
+  const { addAccount, accounts ,schedules, fetchSchedules} = useGlobalState(); // Access the global state and functions
 useEffect(() => {
   fetchSchedules();
 }, []);
+  const [formData, setFormData] = useState({
+    code: '',
+    name: '',
+    phone: '',
+    city: '',
+    credit: 0,
+    debit: 0,
+    schedule_name: ""
+  });
 
+  // Expose handleSave function via ref
+  useImperativeHandle(ref, () => ({
+    handleSave: async () => {
+      console.log('jimmik');
+      console.log("Form Data: ", formData);
 
-const [formData, setFormData] = useState({
-  code: '',
-  name: '',
-  phone: '',
-  city: '',
-  credit: 0,
-  debit: 0,
-  schedule_name: ""
-});
+      if (formData.code && formData.name && formData.schedule_name) {
+        // Validate that the code and name start with the same letter
+        if (formData.code[0] !== formData.name[0]) {
+          alert('Code and Name should start with the same letter');
+          return;
+        }
 
-
-// Handle form input change
-const handleInputChange = (e) => {
-  const { name, value } = e.target;
-
-  setFormData((prevData) => ({
-    ...prevData,
-    [name]: value.toUpperCase(),
+        try {
+          await addAccount(formData); // Try to add the account
+          alert('Account added successfully!');
+          // Reset the form after successful submission
+          setFormData({
+            code: '',
+            name: '',
+            phone: '',
+            city: '',
+            credit: 0,
+            debit: 0,
+            schedule_name: "",
+          });
+        } catch (error) {
+          alert('Failed to add account: ${error.message}');
+        }
+      } else {
+        alert('Please fill in all required fields');
+      }
+    }
   }));
-};
 
-// Handle form submission to add a new account
-const handleSave = async () => {
-  console.log("Form Data: ", formData);
+  // Handle form input change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value.toUpperCase(),
+    }));
+  };
 
-  if (formData.code && formData.name && formData.schedule_name) {
-    // Validate that the code and name start with the same letter
-    if (formData.code[0] !== formData.name[0]) {
-      alert('Code and Name should start with the same letter');
-      return;
-    }
+  return (
+    <div className="account-window">
+      <form>
+        <div className="form-container">
+          <div className="form-labels">
+            <label>Code</label>
+            <label>Name</label>
+            <label>Phone</label>
+            <label>City</label>
+            <label>Credit</label>
+            <label>Debit</label>
+            <label>Schedule</label>
+          </div>
 
-    try {
-      await addAccount(formData); // Try to add the account
-      alert('Account added successfully!');
-      // Reset the form after successful submission
-      setFormData({
-        code: '',
-        name: '',
-        phone: '',
-        city: '',
-        credit: 0,
-        debit: 0,
-        schedule_name: "",
-      });
-    } catch (error) {
-      // Display backend validation errors or generic errors
-      alert(`Failed to add account: ${error.message}`);
-    }
-  } else {
-    alert('Please fill in all required fields');
-  }
-};
+          <div className="form-inputs">
+            <input
+              type="text"
+              name="code"
+              value={formData.code}
+              onChange={handleInputChange}
+              className="input code"
+              tabIndex={1}
+            />
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              className="input name-phone-city"
+              tabIndex={2}
+            />
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              className="input name-phone-city"
+              tabIndex={3}
+            />
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              className="input name-phone-city"
+              tabIndex={4}
+            />
+            <input
+              type="number"
+              name="credit"
+              value={formData.credit}
+              onChange={handleInputChange}
+              className="input credit"
+              tabIndex={5}
+            />
+            <input
+              type="number"
+              name="debit"
+              value={formData.debit}
+              onChange={handleInputChange}
+              className="input debit"
+              tabIndex={6}
+            />
+            <select
+              name="schedule_name"
+              value={formData.schedule_name}
+              onChange={handleInputChange}
+              className="input schedule"
+              tabIndex={7}
+            >
+              <option value="">Select Schedule</option>
+              {schedules.map((schedule) => (
+                <option key={schedule._id} value={schedule.schedule_name}>
+                  {schedule.schedule_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
 
-
-return (
-  <div className="account-window">
-    <div className="form-container">
-      <div className="form-labels">
-        <label>Code</label>
-        <label>Name</label>
-        <label>Phone</label>
-        <label>City</label>
-        <label>Credit</label>
-        <label>Debit</label>
-        {/* <label>Telugu Name</label> */}
-        <label>Schedule</label>
-      </div>
-
-      <div className="form-inputs">
-        <input
-          type="text"
-          name="code"
-          value={formData.code}
-          onChange={handleInputChange}
-          className="input code"
-        />
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleInputChange}
-          className="input name-phone-city"
-        />
-        <input
-          type="text"
-          name="phone"
-          value={formData.phone}
-          onChange={handleInputChange}
-          className="input name-phone-city"
-        />
-        <input
-          type="text"
-          name="city"
-          value={formData.city}
-          onChange={handleInputChange}
-          className="input name-phone-city"
-        />
-        <input
-          type="number"
-          name="credit"
-          value={formData.credit}
-          onChange={handleInputChange}
-          className="input credit"
-        />
-        <input
-          type="number"
-          name="debit"
-          value={formData.debit}
-          onChange={handleInputChange}
-          className="input debit"
-        />
-        {/* <input
-            type="text"
-            readOnly
-            value=""
-            className="input name-phone-city"
-        /> */}
-        <select
-          name="schedule_name"
-          value={formData.schedule_name}
-          onChange={handleInputChange}
-          className="input schedule"
-        >
-          <option value="">Select Schedule</option>
-          {schedules.map((schedule) => (
-            <option key={schedule._id} value={schedule.schedule_name}>
-              {schedule.schedule_name} {/* Accessing schedule_name */}
-            </option>
-          ))}
-        </select>
-      </div>
+        <div className="button-section">
+          <button type="button" onClick={() => ref.current?.handleSave()}>Save</button>
+        </div>
+      </form>
     </div>
-
-    <div className="button-section">
-      <button onClick={handleSave}>Save</button>
-    </div>
-
-    {/* Display the list of accounts */}
-    {/* <div className="accounts-list">
-      <h2>Accounts List</h2>
-      {accounts.length === 0 ? (
-        <p>No accounts available.</p>
-      ) : (
-        <ul>
-          {accounts.map((account) => (
-            <li key={account.code}>
-              {account.name} - {account.schedule_name}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div> */}
-  </div>
-);
+  );
 };
 
-export default AccountWindow;
+export default forwardRef(AccountWindow);
