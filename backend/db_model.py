@@ -28,6 +28,26 @@ class AccountModel(BaseModel):
     credit: Optional[float] = 0.0
     debit: Optional[float] = 0.0
     schedule_name : str
+
+
+class StockModel(BaseModel):
+    id: Optional[str] = None
+    date: Optional[str] = None
+    stockNo: str = Field(..., description="Stock Number")
+    village: Optional[str] = Field(..., description="Village/City")
+    vehicle: Optional[str] = Field(..., description="Vehicle")
+    bags: int = Field(..., description="Number of Bags")
+    product: Optional[str] = None
+    kirai: Optional[float] = None
+    type: Optional[str] = Field(default="Commission", description="Stock Type")
+    exp: Optional[float] = None
+    stockClear: Optional[bool] = False
+
+    class Config:
+        arbitrary_types_allowed = True
+        json_encoders = {
+            ObjectId: str
+        }
     
 
 async def validate_unique_account(account: AccountModel):
@@ -198,3 +218,29 @@ async def get_products():
     except Exception as e:
         print(f"Error fetching schedules: {e}")  # Log the specific error
         raise HTTPException(status_code=500, detail="Failed to fetch schedules")    
+
+# Async function to create a stock entry
+async def create_stock(stock: StockModel):
+    stock_dict = stock.dict(exclude_unset=True)
+    
+    # Remove the 'id' field if it exists to let MongoDB generate a new ID
+    stock_dict.pop('id', None)
+    
+    result = await db.stocks.insert_one(stock_dict)
+    return str(result.inserted_id)
+
+# Async function to get all stocks
+async def get_stocks():
+    stocks = await db.stocks.find().to_list(1000)  # Limit to 1000 stocks
+    return [StockModel(**stock) for stock in stocks]
+
+# Async function to delete a single stock by ID
+async def delete_stock_by_id(stock_id: str):
+    result = await db.stocks.delete_one({"_id": ObjectId(stock_id)})
+    return result.deleted_count > 0
+
+# Async function to delete multiple stocks by IDs
+async def delete_stocks_by_ids(stock_ids: list[str]):
+    object_ids = [ObjectId(stock_id) for stock_id in stock_ids]
+    result = await db.stocks.delete_many({"_id": {"$in": object_ids}})
+    return result.deleted_count > 0

@@ -10,6 +10,7 @@ export const GlobalStateProvider = ({ children }) => {
   const [accounts, setAccounts] = useState([]);
   const [schedules, setSchedules] = useState([]); // Add a state for schedules
   const [products, setProducts] = useState([]);
+  const [stocks, setStocks] = useState([]);
   // Function to fetch schedules from the backend
   const fetchSchedules = async () => {
     try {
@@ -108,6 +109,66 @@ export const GlobalStateProvider = ({ children }) => {
     setProducts((prevProducts) => [...prevProducts, savedProduct]);
     fetchProducts();
   };
+
+  
+  const fetchStocks = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/stocks');
+      const data = await response.json();
+      setStocks(data);
+      console.log(stocks,"fetched successfully")
+    } catch (error) {
+      console.error('Error fetching stocks:', error);
+    }
+  };
+
+  const addStock = async (stockData) => {
+    try {
+      const response = await fetch('http://localhost:8000/stocks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(stockData),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+  
+      const savedStock = await response.json();
+      setStocks((prevStocks) => [...prevStocks, savedStock]);
+      return savedStock;
+    } catch (error) {
+      console.error('Error adding stock:', error.message);
+      throw error;
+    }
+  };
+
+  const deleteStocks = async (stockIds) => {
+    try {
+      const response = await fetch('http://localhost:8000/stocks/bulk-delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: stockIds }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      // Remove deleted stocks from local state
+      setStocks((prevStocks) => 
+        prevStocks.filter((stock) => !stockIds.includes(stock.id))
+      );
+    } catch (error) {
+      console.error('Error deleting stocks:', error.message);
+      throw error;
+    }
+  };
   // Provide the state and functions to the rest of the app
   return (
     <GlobalStateContext.Provider
@@ -121,6 +182,10 @@ export const GlobalStateProvider = ({ children }) => {
         fetchAccounts,
         addSchedule,  
         addProduct,  
+        stocks,
+        fetchStocks,
+        addStock,
+        deleteStocks,
       }}
     >
       {children}
