@@ -1,9 +1,11 @@
 from fastapi import APIRouter
 from typing import List
-from .db_model import AccountModel, create_account, get_accounts,ScheduleModel , get_schedules, delete_account_by_id,delete_schedule_by_id,create_schedule,ProductModel,get_products,create_product,delete_product_by_id, StockModel,create_stock,get_stocks,delete_stock_by_id,delete_stocks_by_ids
+from .db_model import AccountModel, create_account, get_accounts,ScheduleModel , get_schedules, delete_account_by_id,delete_schedule_by_id,create_schedule,ProductModel,get_products,create_product,delete_product_by_id, StockModel,create_stock,get_stocks,delete_stock_by_id,delete_stocks_by_ids,stock_collection
 from fastapi import FastAPI, HTTPException,Body
 from bson.errors import InvalidId
 from pydantic import BaseModel, Field ,validator   
+from bson.objectid import ObjectId
+from pymongo.errors import PyMongoError
 router = APIRouter()
 
 @router.get("/")
@@ -120,6 +122,53 @@ async def delete_multiple_stocks(ids: list[str]):
     except InvalidId:
         raise HTTPException(status_code=400, detail="Invalid _id format")
 
+@router.put("/stocks/{stock_id}")
+async def update_stock(stock_id: str, stock_update: StockModel):
+    """
+    Updates an existing stock based on the stock ID.
+    """
+    print(f"Received update request for stock ID: {stock_id} with data: {stock_update.dict(exclude_unset=True)}")
+
+    try:
+        # Convert stock_id to ObjectId
+        try:
+            object_id = ObjectId(stock_id)
+        except Exception as e:
+            print(f"Invalid stock ID: {stock_id}")
+            raise HTTPException(status_code=400, detail="Invalid stock ID format")
+
+        # Exclude unset fields from the update payload
+        update_data = stock_update.dict(exclude_unset=True, by_alias=True)
+        if "_id" in update_data:
+            del update_data["_id"]  # Ensure _id is not updated
+
+        # Ensure there is at least one field to update
+        if not update_data:
+            raise HTTPException(status_code=400, detail="No fields provided for update")
+
+        # Log the update data
+        print(f"Update data: {update_data}")
+
+        # Perform the update operation
+        result = await stock_collection.update_one(
+            {"_id": object_id}, 
+            {"$set": update_data}
+        )
+
+        # Check the result of the update operation
+        if result.matched_count == 0:
+            print(f"No stock found with ID: {stock_id}")
+            raise HTTPException(status_code=404, detail="Stock not found")
+        
+        print(f"Stock updated successfully: {stock_id}")
+        return {"message": "Stock updated successfully", "updated_fields": update_data}
+
+    except PyMongoError as e:
+        print(f"Database error occurred while updating stock: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update stock")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail="An unexpected error occurred")
 
 
 

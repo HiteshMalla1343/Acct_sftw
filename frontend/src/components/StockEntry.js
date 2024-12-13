@@ -31,7 +31,7 @@ const StockEntry = (props, ref) => {
     village: "",
     vehicle: "",
     bags: "",
-    product: products.length > 0 ? products[0].name : "",
+    product: "",
     kirai: 0,
     type: "Commission",
     exp: 0,
@@ -68,7 +68,7 @@ const StockEntry = (props, ref) => {
   useImperativeHandle(ref, () => ({
     handleSave: async () => {
       console.log(formData, "issue here");
-  
+      fetchStocks();
       if (!formData.stockNo || !formData.product || !formData.bags) {
         alert('Please fill in all required fields');
         return;
@@ -97,7 +97,7 @@ const StockEntry = (props, ref) => {
           village: "",
           vehicle: "",
           bags: "",
-          product: products.length > 0 ? products[0].name : "",
+          product: "",
           kirai: 0,
           type: "Commission",
           exp: 0,
@@ -130,6 +130,9 @@ const StockEntry = (props, ref) => {
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+      else{
+        selectedRows.length = 0;
+      }
   
       // Remove deleted stocks from local state
      fetchStocks(); return
@@ -138,6 +141,85 @@ const StockEntry = (props, ref) => {
       throw error;
     }
   };
+  
+  const handlePopulateForm = () => {
+    if (selectedRows.length === 0 || selectedRows.length > 1) {
+      alert('Please select only 1 stock to edit');
+      return;
+    }
+    // fetchStocks();
+    const selectedStock = stocks.find(stock => stock._id === selectedRows[0]);
+    console.log('Selected stock:', selectedStock);
+    if (!selectedStock) {
+      alert('Selected stock not found');
+      return;
+    }
+  
+    setFormData({
+      date: selectedStock.date || getTodayDate(),
+      stockNo: selectedStock.stockNo,
+      village: selectedStock.village || "",
+      vehicle: selectedStock.vehicle || "",
+      bags: selectedStock.bags || "",
+      product: selectedStock.product || "",
+      kirai: selectedStock.kirai || 0,
+      type: selectedStock.type || "Commission",
+      exp: selectedStock.exp || 0,
+      stockClear: selectedStock.stockClear || false,
+    });
+  
+    alert('Form populated with selected stock data!');
+  };
+  
+  const handleUpdate = async () => {
+    if (!formData.stockNo || !formData.product || !formData.bags) {
+      alert('Please fill in all required fields');
+      return;
+    }
+  
+    const duplicateEntry = stocks.find(
+      stock =>
+        stock.stockNo === formData.stockNo &&
+        stock.product === formData.product &&
+        stock._id !== selectedRows[0]
+    );
+  
+    if (duplicateEntry) {
+      alert('A stock entry with the same Stock Number and Product already exists!');
+      return;
+    }
+  
+    try {
+      const stockId = selectedRows[0];
+  
+      await axios.put(`http://localhost:8000/stocks/${stockId}`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      alert('Stock entry updated successfully!');
+      await fetchStocks();
+  
+      setFormData({
+        date: getTodayDate(),
+        stockNo: generateStockNo(getTodayDate()),
+        village: "",
+        vehicle: "",
+        bags: "",
+        product: "",
+        kirai: 0,
+        type: "Commission",
+        exp: 0,
+        stockClear: false,
+      });
+    } catch (error) {
+      alert(`Failed to update stock: ${error.message}`);
+    }
+  };
+  
+  
+  
 
   const handleCheckboxChange = (id, e) => {
     if (e.target.checked) {
@@ -261,7 +343,7 @@ const StockEntry = (props, ref) => {
                   onChange={handleInputChange}
                   className="form-select"
                 >
-                <option value="">Select Product</option>
+                <option value="">SELECT PRODUCT</option>
                   {products.map((product) => (
                     <option key={product._id} value={product.product_name}>
                       {product.product_name}
@@ -324,6 +406,7 @@ const StockEntry = (props, ref) => {
                   onChange={handleInputChange}
                   className="form-select"
                 >
+                  <option value="">SELECT TYPE</option>
                   <option value="Commission">Commission</option>
                   <option value="Stock Clear">Stock Clear</option>
                 </select>
@@ -367,6 +450,8 @@ const StockEntry = (props, ref) => {
         <div className="button-section submit-button">
           <button type="button" onClick={ref.current?.handleSave}>Save</button>
           <button type="button" onClick={handleDelete}>Delete</button>
+          <button type="button" onClick={handlePopulateForm}>Edit</button>
+          <button type="button" onClick={handleUpdate}>Update</button>
         </div>
       </form>
 
