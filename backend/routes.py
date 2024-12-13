@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from typing import List
 from .db_model import AccountModel, create_account, get_accounts,ScheduleModel , get_schedules, delete_account_by_id,delete_schedule_by_id,create_schedule,ProductModel,get_products,create_product,delete_product_by_id, StockModel,create_stock,get_stocks,delete_stock_by_id,delete_stocks_by_ids
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException,Body
 from bson.errors import InvalidId
-
+from pydantic import BaseModel, Field ,validator   
 router = APIRouter()
 
 @router.get("/")
@@ -106,19 +106,11 @@ async def fetch_stocks():
     print(stocks)
     return stocks
 
-@router.delete("/stocks/{id}")
-async def delete_stock(id: str):
-    try:
-        result = await delete_stock_by_id(id)
-        if result:
-            return {"message": f"Stock with _id {id} deleted successfully"}
-        else:
-            raise HTTPException(status_code=404, detail=f"Stock with _id {id} not found")
-    except InvalidId:
-        raise HTTPException(status_code=400, detail="Invalid _id format")
-
 @router.delete("/stocks/bulk-delete")
-async def delete_multiple_stocks(stock_ids: List[str]):
+async def delete_multiple_stocks(ids: list[str]):
+    stock_ids = ids
+    print("Received stock IDs:")
+    print(stock_ids)
     try:
         result = await delete_stocks_by_ids(stock_ids)
         if result:
@@ -127,5 +119,7 @@ async def delete_multiple_stocks(stock_ids: List[str]):
             raise HTTPException(status_code=404, detail="No stocks found to delete")
     except InvalidId:
         raise HTTPException(status_code=400, detail="Invalid _id format")
+
+
 
 

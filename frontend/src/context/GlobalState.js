@@ -1,6 +1,6 @@
     // context/GlobalState.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
-
+import axios from "axios";
 // Create the Global Context
 const GlobalStateContext = createContext();
 
@@ -145,30 +145,7 @@ export const GlobalStateProvider = ({ children }) => {
       throw error;
     }
   };
-
-  const deleteStocks = async (stockIds) => {
-    try {
-      const response = await fetch('http://localhost:8000/stocks/bulk-delete', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ids: stockIds }),
-      });
   
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
-      // Remove deleted stocks from local state
-      setStocks((prevStocks) => 
-        prevStocks.filter((stock) => !stockIds.includes(stock.id))
-      );
-    } catch (error) {
-      console.error('Error deleting stocks:', error.message);
-      throw error;
-    }
-  };
   // Provide the state and functions to the rest of the app
   return (
     <GlobalStateContext.Provider
@@ -185,7 +162,7 @@ export const GlobalStateProvider = ({ children }) => {
         stocks,
         fetchStocks,
         addStock,
-        deleteStocks,
+        
       }}
     >
       {children}

@@ -1,12 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } from "react";
 import { useGlobalState } from '../context/GlobalState';
 import "../css/StockEntry.css";
+import axios from "axios";
 
-const StockEntry = () => {
-  const { addStock, stocks, deleteStocks, fetchProducts, products, fetchStocks } = useGlobalState();
-  const formRef = useRef(null);
-  console.log({stocks});
-
+const StockEntry = (props, ref) => {
+  const { addStock, stocks, fetchProducts, products, fetchStocks } = useGlobalState();
+  // const formRef = useRef(null);
+  // console.log({stocks});
+  
   useEffect(() => {
     fetchProducts(); // Fetch products when component mounts
   }, []);
@@ -64,59 +65,77 @@ const StockEntry = () => {
     }));
   };
 
-  const handleSave = async () => {
-    console.log(formData,"issue here")
-    if (!formData.stockNo || !formData.product || !formData.bags) {
-      alert('Please fill in all required fields');
-      return;
+  useImperativeHandle(ref, () => ({
+    handleSave: async () => {
+      console.log(formData, "issue here");
+  
+      if (!formData.stockNo || !formData.product || !formData.bags) {
+        alert('Please fill in all required fields');
+        return;
+      }
+  
+      // Check for duplicate stock entry (same stock number and product)
+      const duplicateEntry = stocks.find(
+        stock =>
+          stock.stockNo === formData.stockNo &&
+          stock.product === formData.product
+      );
+  
+      if (duplicateEntry) {
+        alert('A stock entry with the same Stock Number and Product already exists!');
+        return;
+      }
+  
+      try {
+        await addStock(formData);
+        alert('Stock entry added successfully!');
+        await fetchStocks();
+        // Reset form
+        setFormData({
+          date: getTodayDate(),
+          stockNo: generateStockNo(getTodayDate()),
+          village: "",
+          vehicle: "",
+          bags: "",
+          product: products.length > 0 ? products[0].name : "",
+          kirai: 0,
+          type: "Commission",
+          exp: 0,
+          stockClear: false
+        });
+      } catch (error) {
+        alert(`Failed to add stock: ${error.message}`);
+      }
     }
-
-    // Check for duplicate stock entry (same stock number and product)
-    const duplicateEntry = stocks.find(
-      stock => 
-        stock.stockNo === formData.stockNo && 
-        stock.product === formData.product
-    );
-
-    if (duplicateEntry) {
-      alert('A stock entry with the same Stock Number and Product already exists!');
-      return;
-    }
-
-    try {
-      await addStock(formData);
-      alert('Stock entry added successfully!');
-      await fetchStocks();
-      // Reset form
-      setFormData({
-        date: getTodayDate(),
-        stockNo: generateStockNo(getTodayDate()),
-        village: "",
-        vehicle: "",
-        bags: "",
-        product: products.length > 0 ? products[0].name : "",
-        kirai: 0,
-        type: "Commission",
-        exp: 0,
-        stockClear: false
-      });
-    } catch (error) {
-      alert(`Failed to add stock: ${error.message}`);
-    }
-  };
-
+  }));
+  
   const handleDelete = async () => {
     if (selectedRows.length === 0) {
       alert('Please select rows to delete');
       return;
     }
 
+    console.log('hemlo');
+    console.log(selectedRows);
+    
     try {
-      await deleteStocks(selectedRows);
-      alert('Selected stocks deleted successfully!');
-      setSelectedRows([]);
+      const response = await axios.delete('http://localhost:8000/stocks/bulk-delete', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: selectedRows, // Use `data` for sending the request body in DELETE requests with axios
+      });
+  
+      // Check if the response indicates success
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      // Remove deleted stocks from local state
+     fetchStocks(); return
     } catch (error) {
-      alert(`Failed to delete stocks: ${error.message}`);
+      console.error('Error deleting stocks:', error.message);
+      throw error;
     }
   };
 
@@ -125,13 +144,6 @@ const StockEntry = () => {
       setSelectedRows((prev) => [...prev, id]);
     } else {
       setSelectedRows((prev) => prev.filter((rowId) => rowId !== id));
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleSave();
     }
   };
 
@@ -249,6 +261,7 @@ const StockEntry = () => {
                   onChange={handleInputChange}
                   className="form-select"
                 >
+                <option value="">Select Product</option>
                   {products.map((product) => (
                     <option key={product._id} value={product.product_name}>
                       {product.product_name}
@@ -352,7 +365,7 @@ const StockEntry = () => {
         </div>
 
         <div className="button-section submit-button">
-          <button type="button" onClick={handleSave}>Save</button>
+          <button type="button" onClick={ref.current?.handleSave}>Save</button>
           <button type="button" onClick={handleDelete}>Delete</button>
         </div>
       </form>
@@ -374,12 +387,12 @@ const StockEntry = () => {
                 {stocks
                 .filter(data => data.date === formData.date)
                 .map((data, index) => (
-                  <tr key={data.id}>
+                  <tr key={data._id}>
                     <td>
                       <input
                         type="checkbox"
-                        checked={selectedRows.includes(data.id)}
-                        onChange={(e) => handleCheckboxChange(data.id, e)}
+                        // checked={selectedRows.includes(data.id)}
+                        onChange={(e) => handleCheckboxChange(data._id, e)}
                       />
                     </td>
                     <td>{index + 1}</td>
@@ -397,4 +410,4 @@ const StockEntry = () => {
   );
 };
 
-export default StockEntry;
+export default forwardRef(StockEntry);

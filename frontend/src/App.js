@@ -6,11 +6,11 @@ import AccountWindow from "./components/AccountWindow";
 import ProductWindow from "./components/ProductWindow";
 import CustomerList from "./components/CustomerList";
 import ScheduleWindow from "./components/ScheduleWindow";
-import StockNumberComponent from "./components/StockEntry";
+import StockEntry from './components/StockEntry';
 import { GlobalStateProvider } from './context/GlobalState'; // Path to your GlobalState file
 
 import "./App.css";
-import StockEntry from './components/StockEntry';
+
 
 function adjustBackgroundHeight() {
   const navbar = document.getElementById("navbar");
