@@ -7,10 +7,13 @@ const StockEntry = (props, ref) => {
   const { addStock, stocks, fetchProducts, products, fetchStocks } = useGlobalState();
   // const formRef = useRef(null);
   // console.log({stocks});
+
+  const formDataRef = useRef(null);
   
   useEffect(() => {
     fetchProducts(); // Fetch products when component mounts
   }, []);
+
 
   // Function to get today's date in YYYY-MM-DD format
   const getTodayDate = () => {
@@ -42,6 +45,11 @@ const StockEntry = (props, ref) => {
     fetchStocks(); // Fetch products when component mounts
   }, [formData.date]);
 
+    // Keep formDataRef in sync with the latest formData
+    useEffect(() => {
+      formDataRef.current = formData;
+    }, [formData]);
+
 
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -63,34 +71,33 @@ const StockEntry = (props, ref) => {
         ? value.replace(/[^0-9.]/g, '') 
         : value.toUpperCase(),
     }));
+
+    console.log(formData,"data check");
   };
+  
 
   useImperativeHandle(ref, () => ({
     handleSave: async () => {
-      console.log(formData, "issue here");
-      fetchStocks();
-      if (!formData.stockNo || !formData.product || !formData.bags) {
-        alert('Please fill in all required fields');
+      const currentFormData = formDataRef.current; // Access the latest formData
+
+      if (!currentFormData.stockNo || !currentFormData.product || !currentFormData.bags) {
+        alert("Please fill in all required fields");
         return;
       }
-  
-      // Check for duplicate stock entry (same stock number and product)
+
       const duplicateEntry = stocks.find(
-        stock =>
-          stock.stockNo === formData.stockNo &&
-          stock.product === formData.product
+        (stock) => stock.stockNo === currentFormData.stockNo && stock.product === currentFormData.product
       );
-  
+
       if (duplicateEntry) {
-        alert('A stock entry with the same Stock Number and Product already exists!');
+        alert("A stock entry with the same Stock Number and Product already exists!");
         return;
       }
-  
+
       try {
-        await addStock(formData);
-        alert('Stock entry added successfully!');
-        await fetchStocks();
-        // Reset form
+        await addStock(currentFormData);
+        alert("Stock entry added successfully!");
+        fetchStocks();
         setFormData({
           date: getTodayDate(),
           stockNo: generateStockNo(getTodayDate()),
@@ -101,13 +108,14 @@ const StockEntry = (props, ref) => {
           kirai: 0,
           type: "Commission",
           exp: 0,
-          stockClear: false
+          stockClear: false,
         });
       } catch (error) {
         alert(`Failed to add stock: ${error.message}`);
       }
-    }
+    },
   }));
+
   
   const handleDelete = async () => {
     if (selectedRows.length === 0) {
