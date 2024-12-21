@@ -12,6 +12,7 @@ account_collection = db.Account  # Replace 'accounts' with your actual collectio
 schedule_collection = db.schedules # Replace 'schedules' with your
 product_collection = db.products # Replace 'products' with your
 stock_collection = db.stocks # Replace 'stocks' with your
+sales_collection = db.sales # Replace 'sales' with your
 
 class ScheduleModel(BaseModel):
     id: Optional[str] = Field(None, alias="_id")
@@ -51,7 +52,23 @@ class StockModel(BaseModel):
             ObjectId: str
         }
     
+class Sale(BaseModel):
+    id: Optional[str] = Field(None, alias="_id")
+    stockNo: Optional[str] = None
+    code: Optional[str] = None
+    name: Optional[str] = None
+    bags: Optional[float] = None
+    quantity: Optional[float] = None
+    rate: Optional[float] = None
+    product: Optional[str] = None
+    amount: Optional[float] = None
+    cooly: Optional[float] = None
+    detail: Optional[str] = None
+    date: Optional[str] = None
 
+    class Config:
+        json_encoders = {ObjectId: str}
+        
 async def validate_unique_account(account: AccountModel):
     """
     Validate that the account code and name are unique in the database

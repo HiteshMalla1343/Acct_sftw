@@ -1,215 +1,191 @@
-/* Main container styling */
-.stock-entry-form {
-  padding: 10px;
-  background-color: #f4f4f4;
+.stock-entry-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  gap: 1rem;
 }
-/* General input styling */
-/* .form-input,
-.form-select {
-  height: 30px; 
-  padding: 5px 10px;
-  font-size: 7px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-} */
+
+.stock-entry-form {
+  flex: 0 0 auto;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.top-section {
+  margin-bottom: 1rem;
+}
+
+.bottom-section {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .form-group {
   display: flex;
-  align-items: center;
-  margin-bottom: 15px;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .label-container {
-  flex: 1;
-  text-align: center; /* Aligns labels to the right */
-  padding-right: 10px; /* Adds spacing between label and input */
+  flex: 0 0 auto;
 }
 
 .input-container {
-  flex: 2;
-}
-
-.form-group {
-  display: flex; /* Use flexbox for horizontal alignment */
-  align-items: center; /* Vertically center items */
-  gap: 10px; /* Add spacing between label and input */
-  margin-bottom: 15px; /* Add spacing between rows */
-}
-/* Styling for labels */
-.form-label {
-  font-size: 7px;
-  font-weight: bold;
-  line-height: 40px; 
-  margin-bottom: 8px; 
-  display: inline-block; 
-}  
-
-/* .form-label {
-  font-size: medium;
-  font-weight: bold;
-  white-space: nowrap;
-} */
-
-/* Input styling */
-/* .form-input,.form-select {
-  flex: 1; 
-  padding: 8px;
-  font-size: medium;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-} */
-/* Ensure alignment between label and input */
-.form-group {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Space between label and input */
-  margin-bottom: 10px;
-}
-
-/* Container adjustments */
-.form-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-/* Vertical alignment for grouped fields */
-.form-column {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Top section: Date field aligned to the right */
-.top-section {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 10px;
-}
-
-.top-section label {
-  font-size: medium;
-}
-
-/* Bottom section: 3 columns layout */
-.bottom-section {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-/* Columns */
-.form-column {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
-/* Form labels and inputs */
-.form-column label {
-  margin-bottom: 1rem;
-  font-size: medium;
+.form-label {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
 }
 
-.form-input {
+.form-input, .form-select {
   width: 100%;
-  padding: 5px;
-  font-size: large;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background-color: #fff;
+}
+.form-select {
+  margin-bottom: 4.5%;
+}
+.date{
+  width: auto;
+  margin-left: 2%;
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: #2563eb;
+  ring: 2px;
+  ring-color: #93c5fd;
 }
 
 .form-select {
+  cursor: pointer;
+}
+
+.button-section {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.button-section button {
+  padding: 0.5rem 1rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button-section button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Table Styles */
+.stocklist {
+  flex: 1;
+  min-height: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.table-section {
+  height: 100%;
+  overflow: hidden;
+}
+
+.table-container {
+  height: 100%;
+  overflow: auto;
+}
+
+.custom-table {
   width: 100%;
-  padding: 5px;
-  font-size: medium;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  /* border-collapse: collapse; */
+  background-color: white;
 }
 
-/* Background colors for inputs */
-.form-input.stock-no {
-  background-color: #ffe4e1;
+.custom-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f8fafc;
 }
 
-.form-input.bags,
-.form-input.vehicle {
-  background-color: #ffffcc;
+.custom-table th {
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-bottom: 2px solid #e5e7eb;
+  background-color: #f8fafc;
 }
 
-.form-select.type {
-  background-color: #ffe4b5;
+.custom-table td {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  color: #4b5563;
 }
 
-.form-input.kirai {
-  background-color: #ccffcc;
-}
-
-.form-input.village {
-  background-color: #ffe4e1;
-}
-
-.form-input.exp {
-  background-color: #ffe4e1;
+.custom-table tbody tr:hover {
+  background-color: #f9fafb;
 }
 
 /* Checkbox styling */
-.checkbox-label {
+.checkbox-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-/* Submit button styling */
-.button-section {
-  display: flex;
-  justify-content: space-evenly; /* Adjusts spacing between buttons */
-  gap: 1rem; /* Adds spacing between buttons */
-  align-items: center; /* Vertically centers the buttons */
+.form-checkbox {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
 }
 
-.button-section button {
-  padding: 0.5rem 1rem; /* Adds padding inside the buttons */
-  font-size: 1rem; /* Ensures consistent font size */
-  cursor: pointer; /* Changes cursor to pointer for better UX */
-  border: 1px solid #ccc; /* Adds a subtle border */
-  background-color: #f5f5f5; /* Adds a background color */
-  transition: background-color 0.3s ease; /* Adds hover effect */
-}
-
-.button-section button:hover {
-  background-color: #e0e0e0; /* Lightens the background color on hover */
-}
-
-
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .bottom-section {
+    flex-direction: column;
+  }
   
-.stocklist {
-  padding: 10px;
-  background-color: #f4f4f4;
-}
-
-/* Table section styling */
-.table-section {
-  margin-top: 10px;
-  border-top: 2px solid red;
-  padding-top: 10px;
-}
-
-.table-container {
-  margin: 20px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  .form-column {
+    width: 100%;
+  }
 }
 
 /* Custom table styling */
 .custom-table {
   width: 100%;
-  border-collapse: collapse;
+  /* border-collapse: collapse; */
   margin-top: 10px;
 }
 

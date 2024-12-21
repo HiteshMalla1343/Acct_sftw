@@ -7,6 +7,7 @@ import ProductWindow from "./components/ProductWindow";
 import CustomerList from "./components/CustomerList";
 import ScheduleWindow from "./components/ScheduleWindow";
 import StockEntry from './components/StockEntry';
+import Sales from './components/Sales';
 import { GlobalStateProvider } from './context/GlobalState'; // Path to your GlobalState file
 
 import "./App.css";
@@ -49,6 +50,7 @@ function App() {
     "Customer List": useRef(null),
     "Schedules": useRef(null),
     "Stock Entry": useRef(null),
+    "Sales": useRef(null)
   };
 
   // Define handleKeyDown outside to avoid ESLint error
@@ -80,7 +82,8 @@ function App() {
     "Product": { component: <ProductWindow ref={windowRefs["Product"]} />, defaultSize: { width: 600, height: 600 } },
     "Customer List": { component: <CustomerList ref={windowRefs["Customer List"]} />, defaultSize: { width: 700, height: 700 } },
     "Schedules": { component: <ScheduleWindow ref={windowRefs["Schedules"]} />, defaultSize: { width: 600, height: 600 } },
-    "Stock Entry": { component: <StockEntry ref={windowRefs["Stock Entry"]} />, defaultSize: { width: 1000, height: 600 } }
+    "Stock Entry": { component: <StockEntry ref={windowRefs["Stock Entry"]} />, defaultSize: { width: 1000, height: 600 } },
+    "Sales": { component: <Sales ref={windowRefs["Sales"] } />, defaultSize: { width: 1000, height: 600 } },
   };
 
   return (

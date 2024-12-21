@@ -250,7 +250,7 @@ const StockEntry = (props, ref) => {
               value={formData.date}
               onChange={handleInputChange}
               required
-              className="form-input"
+              className="form-input date"
             />
           </label>
         </div>

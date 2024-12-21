@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from typing import List
-from .db_model import AccountModel, create_account, get_accounts,ScheduleModel , get_schedules, delete_account_by_id,delete_schedule_by_id,create_schedule,ProductModel,get_products,create_product,delete_product_by_id, StockModel,create_stock,get_stocks,delete_stock_by_id,delete_stocks_by_ids,stock_collection
+# from .db_model import AccountModel, create_account, get_accounts,ScheduleModel , get_schedules, delete_account_by_id,delete_schedule_by_id,create_schedule,ProductModel,get_products,create_product,delete_product_by_id, StockModel,create_stock,get_stocks,delete_stock_by_id,delete_stocks_by_ids,stock_collection,sales_collection,Sale 
+from .db_model import *
 from fastapi import FastAPI, HTTPException,Body
 from bson.errors import InvalidId
 from pydantic import BaseModel, Field ,validator   
@@ -171,4 +172,75 @@ async def update_stock(stock_id: str, stock_update: StockModel):
         raise HTTPException(status_code=500, detail="An unexpected error occurred")
 
 
+@router.get("/sales", response_model=List[Sale])
+async def get_sales():
+    try:
+        sales_cursor = sales_collection.find()
+        sales = await sales_cursor.to_list(length=100)
+        sales_cleaned = [{**sale, "_id": str(sale["_id"])} for sale in sales]
+        return sales_cleaned
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to fetch sales")
 
+@router.post("/sales", response_model=Sale)
+async def add_sale(sale: Sale):
+    sale_dict = sale.dict(exclude={"id"})
+    result = await sales_collection.insert_one(sale_dict)
+    sale.id = str(result.inserted_id)
+    return sale
+
+@router.delete("/sales/bulk-delete")
+async def delete_sale(stock_ids: list[str]) -> bool:
+    print("Starting bulk delete process")
+    try:
+        # Ensure stock_ids is not empty
+        if not stock_ids:
+            print("No stock IDs provided for deletion")
+            raise HTTPException(status_code=400, detail="No stock IDs provided")
+
+        # Convert string IDs to ObjectId
+        try:
+            object_ids = [ObjectId(stock_id) for stock_id in stock_ids]
+        except Exception as e:
+            print(f"Invalid sale IDs provided: {stock_ids}")
+            raise HTTPException(status_code=400, detail="Invalid sale ID format")
+
+        # Log the converted ObjectIds
+        print(f"Deleting sales with IDs: {object_ids}")
+
+        # Delete all documents with matching _ids
+        result = await sales_collection.delete_many({"_id": {"$in": object_ids}})
+        
+        # Log the number of documents deleted
+        print(f"Number of sales deleted: {result.deleted_count}")
+
+        # Return success only if at least one document was deleted
+        if result.deleted_count == 0:
+            print("No matching sales found for deletion")
+            raise HTTPException(status_code=404, detail="No matching sales found")
+
+        return True
+    except PyMongoError as e:
+        print(f"Database error occurred while deleting stocks: {e}")  # Log the specific error
+        raise HTTPException(status_code=500, detail="Failed to delete stocks")
+    except Exception as e:
+        print(f"Unexpected error: {e}")  # Catch any unexpected errors
+        raise HTTPException(status_code=500, detail="An unexpected error occurred")
+
+@router.put("/sales/{sale_id}", response_model=Sale)
+async def update_sale(sale_id: str, updated_sale: Sale):
+    try:
+        sale_dict = updated_sale.dict(exclude={"id"}, exclude_unset=True)
+        object_id = ObjectId(sale_id)
+        if not sale_dict:
+            raise HTTPException(status_code=400, detail="No fields provided for update")
+        result = await sales_collection.update_one(
+            {"_id": object_id}, {"$set": sale_dict}
+        )
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Sale not found")
+        return {"message": "Sale updated successfully", "updated_fields": sale_dict}
+    except PyMongoError as e:
+        raise HTTPException(status_code=500, detail="Failed to update sale")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="An unexpected error occurred")

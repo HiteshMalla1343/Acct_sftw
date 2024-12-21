@@ -1,4 +1,4 @@
-    // context/GlobalState.js
+// context/GlobalState.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from "axios";
 // Create the Global Context
@@ -11,6 +11,7 @@ export const GlobalStateProvider = ({ children }) => {
   const [schedules, setSchedules] = useState([]); // Add a state for schedules
   const [products, setProducts] = useState([]);
   const [stocks, setStocks] = useState([]);
+  const [Sales, setSales] = useState([]);
   // Function to fetch schedules from the backend
   const fetchSchedules = async () => {
     try {
@@ -44,7 +45,7 @@ export const GlobalStateProvider = ({ children }) => {
       // console.log(response);
       const data = await response.json();
       // console.log(data);
-      
+
       setAccounts(data); // Set the fetched schedules in global state
     } catch (error) {
       console.error('Error fetching schedules:', error);
@@ -62,12 +63,12 @@ export const GlobalStateProvider = ({ children }) => {
         },
         body: JSON.stringify(accountData),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json(); // Extract error details from the backend
         throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
       }
-  
+
       const savedAccount = await response.json();
       setAccounts((prevAccounts) => [...prevAccounts, savedAccount]);
       return savedAccount;
@@ -77,7 +78,7 @@ export const GlobalStateProvider = ({ children }) => {
     }
   };
 
-  const addSchedule =async (Scheduledata) => {
+  const addSchedule = async (Scheduledata) => {
     console.log(Scheduledata);
     const response = await fetch('http://localhost:8000/schedules', {
       method: 'POST',
@@ -93,7 +94,7 @@ export const GlobalStateProvider = ({ children }) => {
     setSchedules((prevSchedules) => [...prevSchedules, savedSchedule]);
     fetchSchedules();
   };
-  const addProduct =async (Productdata) => {
+  const addProduct = async (Productdata) => {
     console.log(Productdata);
     const response = await fetch('http://localhost:8000/products', {
       method: 'POST',
@@ -110,13 +111,13 @@ export const GlobalStateProvider = ({ children }) => {
     fetchProducts();
   };
 
-  
+
   const fetchStocks = async () => {
     try {
       const response = await fetch('http://localhost:8000/stocks');
       const data = await response.json();
       setStocks(data);
-      console.log(stocks,"fetched successfully")
+      console.log(stocks, "fetched successfully")
     } catch (error) {
       console.error('Error fetching stocks:', error);
     }
@@ -131,12 +132,12 @@ export const GlobalStateProvider = ({ children }) => {
         },
         body: JSON.stringify(stockData),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
       }
-  
+
       const savedStock = await response.json();
       setStocks((prevStocks) => [...prevStocks, savedStock]);
       return savedStock;
@@ -145,24 +146,62 @@ export const GlobalStateProvider = ({ children }) => {
       throw error;
     }
   };
-  
+
+  const fetchSales = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/sales');
+      const data = await response.json();
+      setSales(data);
+      console.log(Sales, "fetched successfully")
+    } catch (error) {
+      console.error('Error fetching sales:', error);
+    }
+  }
+
+  const addSale = async (saleData) => {
+    console.log(saleData);
+    try {
+      const response = await fetch('http://localhost:8000/sales', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(saleData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+      const savedSale = await response.json();
+      setSales((prevSales) => [...prevSales, savedSale]);
+      return savedSale;
+    }
+    catch (error) {
+      console.error('Error adding sale:', error.message);
+      throw error;
+    }
+  };
   // Provide the state and functions to the rest of the app
   return (
     <GlobalStateContext.Provider
       value={{
         accounts,
-        schedules, 
+        schedules,
         products,
         addAccount,
         fetchSchedules,
         fetchProducts,
         fetchAccounts,
-        addSchedule,  
-        addProduct,  
+        addSchedule,
+        addProduct,
         stocks,
         fetchStocks,
         addStock,
-        
+        Sales,
+        fetchSales,
+        addSale,
+
       }}
     >
       {children}

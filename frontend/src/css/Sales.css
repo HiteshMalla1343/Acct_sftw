@@ -1,0 +1,41 @@
+.popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.popup-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.popup-item:hover {
+  background-color: #f0f0f0;
+}
+
+.popup-item.selected {
+  background-color: #e0e0e0;
+}
+  
+  .input-container {
+    position: relative;
+  }
+
+.stockwise{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px 0;
+    /* font-size: large; */
+    padding: 0.75rem 0;
+}
+
+.stockwise button{
+    font-size: 0.875rem;
+}
